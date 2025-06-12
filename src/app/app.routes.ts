@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { CagesComponent } from './features/cages/cages/cages.component';
 
 export const routes: Routes = [
   {
@@ -8,9 +9,6 @@ export const routes: Routes = [
   },
   {
     path: 'cages',
-    // loadComponent: () =>
-    //   import('./components/cage-management/cage-management.component').then(
-    //     (m) => m.CageManagementComponent,
-    //   ),
+    component: CagesComponent,
   },
 ];

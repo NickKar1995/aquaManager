@@ -1,0 +1,22 @@
+// Background color for the drawer panel
+::ng-deep .dx-drawer-panel-content {
+  background-color: #c1c2cf; /* Dark blue-gray */
+}
+
+::ng-deep #toolbar {
+  height: 3rem;
+  .dx-toolbar-button .dx-button {
+    background-color: transparent;
+    border: none;
+  }
+  .dx-toolbar-items-container {
+    // height: 100vh;
+    background-color: #c1c2cf;
+    height: 100%;
+    align-items: stretch;
+  }
+}
+
+#view {
+  padding: 1.5rem;
+}
