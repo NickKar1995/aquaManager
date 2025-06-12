@@ -1,9 +1,25 @@
-<p>cages works!</p>
-<dx-tile-view [dataSource]="tileViewData" itemTemplate="cardTpl">
-  <div *dxTemplate="let card of 'cardTpl'">
-    <div class="card">
-      <h3>{{ card.text }}</h3>
-      <!-- <p>{{ card.description }}</p> -->
-    </div>
-  </div>
+<!-- <p>cages works!</p>
+
+<dx-tile-view
+  #tileView
+  [height]="390"
+  [baseItemHeight]="120"
+  [baseItemWidth]="185"
+  width="100%"
+  [itemMargin]="10"
+  direction="horizontal"
+>
+  @for(home of tileViewData; track home) {
+  <dxi-item class="card" [widthRatio]="home.widthRatio" [heightRatio]="home.heightRatio">
+    {{ home.text }}
+  </dxi-item>
+  }
 </dx-tile-view>
+
+ -->
+
+<div class="tiles-container">
+  @for(home of tileViewData; track home) {
+  <app-card [data]="home" />
+  }
+</div>

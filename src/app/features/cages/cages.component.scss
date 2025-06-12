@@ -1,0 +1,42 @@
+.card {
+  display: flex;
+  flex-direction: column; // Arrange content vertically
+  justify-content: center; // Center content vertically
+  align-items: center; // Center content horizontally
+  height: 100%; // Make sure the card fills the tile's height
+  width: 100%; // Make sure the card fills the tile's width
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center; // For text inside
+}
+
+.tiles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; // Αντικαθιστά το itemMargin
+  width: 100%;
+  max-height: 390px;
+  overflow-y: auto; // Scroll αν χρειάζεται
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+// Responsive behavior
+@media (max-width: 599px) {
+  .tile-item {
+    width: calc(50% - 5px); // 2 items per row on small screens
+  }
+
+  .card {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 400px) {
+  .tile-item {
+    width: 100%; // 1 item per row on very small screens
+  }
+}
