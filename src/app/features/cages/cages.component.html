@@ -1,0 +1,9 @@
+<p>cages works!</p>
+<dx-tile-view [dataSource]="tileViewData" itemTemplate="cardTpl">
+  <div *dxTemplate="let card of 'cardTpl'">
+    <div class="card">
+      <h3>{{ card.text }}</h3>
+      <!-- <p>{{ card.description }}</p> -->
+    </div>
+  </div>
+</dx-tile-view>

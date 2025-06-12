@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { CagesComponent } from './features/cages/cages/cages.component';
+import { CagesComponent } from './features/cages/cages.component';
 
 export const routes: Routes = [
   {
@@ -10,5 +10,10 @@ export const routes: Routes = [
   {
     path: 'cages',
     component: CagesComponent,
+  },
+  {
+    path: 'fish-stocking',
+    loadComponent: () =>
+      import('./features/fish-stocking/fish-stocking.component').then((m) => m.FishStockingComponent),
   },
 ];
