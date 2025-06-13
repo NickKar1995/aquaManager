@@ -1,0 +1,73 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DxPopupModule } from 'devextreme-angular';
+import { DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule } from 'devextreme-angular';
+
+@Component({
+  selector: 'app-cage-form',
+  imports: [DxPopupModule, ReactiveFormsModule, DxTextBoxModule, DxButtonModule],
+  templateUrl: './cage-form.component.html',
+  styleUrl: './cage-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CageFormComponent implements OnInit {
+  @Input() isPopupVisible = false;
+  @Output() popupVisibilityChanged = new EventEmitter<boolean>();
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() initialData: any = null;
+  private formBuilder = inject(FormBuilder);
+  formSub!: FormGroup;
+
+  ngOnInit() {
+    this.initForm();
+    console.log(this.initialData)
+
+  }
+
+  private initForm() {
+    this.formSub = this.formBuilder.group({
+      name: [''],
+      depth: [''],
+      diameter: [''],
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(this.initialData)
+    // Ελέγχουμε αν το isPopupVisible έχει αλλάξε
+    // Όταν ανοίγει το popup με δεδομένα edit, γεμίζουμε το form
+    if (changes['initialData'] && this.initialData) {
+      this.formSub.patchValue(this.initialData);
+    }
+    // Αν είναι create, κάνουμε reset
+    if (this.mode === 'create' && this.formSub) {
+      this.formSub.reset();
+    }
+  }
+
+  
+  onSubmit() {
+    if (this.formSub.invalid) return;
+    const payload = this.formSub.value;
+    if (this.mode === 'create') {
+      // κλήση Create API
+    } else {
+      // κλήση Update API με this.initialData.id
+    }
+    this.closePopup();
+  }
+
+  closePopup() {
+    this.popupVisibilityChanged.emit(false);
+  }
+}

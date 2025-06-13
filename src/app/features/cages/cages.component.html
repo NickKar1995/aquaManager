@@ -20,6 +20,17 @@
 
 <div class="tiles-container">
   @for(home of tileViewData; track home) {
-  <app-card [data]="home" />
+  <app-card (click)="editCage(home)" [data]="home" />
   }
 </div>
+
+<div class="actions">
+  <dx-button type="default" text="Create cage" (onClick)="createCage()"></dx-button>
+</div>
+
+<app-cage-form
+  (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
+  [isPopupVisible]="isPopupVisible"
+  [initialData]="selectedData"
+  [mode]="mode"
+/>

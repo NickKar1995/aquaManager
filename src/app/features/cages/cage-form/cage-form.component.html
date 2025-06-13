@@ -1,0 +1,24 @@
+<dx-popup
+  (onHiding)="closePopup()"
+  [hideOnOutsideClick]="true"
+  [(visible)]="isPopupVisible"
+  contentTemplate="popup-content"
+>
+  <div *dxTemplate="let data of 'popup-content'">
+    <form [formGroup]="formSub">
+      <dx-text-box formControlName="name" label="Name" labelMode="floating"> </dx-text-box>
+
+      <dx-text-box formControlName="depth" label="Depth" labelMode="floating"> </dx-text-box>
+
+      <dx-text-box formControlName="diameter" label="Diameter" labelMode="floating"> </dx-text-box>
+    </form>
+    <div class="buttons">
+      <dx-button
+        type="success"
+        [text]="mode === 'create' ? 'Create' : 'Save Changes'"
+        (onClick)="onSubmit()"
+      >
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>
