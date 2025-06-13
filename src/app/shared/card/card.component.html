@@ -1,3 +1,29 @@
-<div class="tile-item card">
-  {{ data.text }}
+<!-- <div class="tile-item card">
+  {{ data.name }}
+</div> -->
+
+<!-- <div class="tile-item card" tabindex="0">
+  <span class="card-title">{{ data.name }}</span>
+
+  <button
+    class="delete-btn"
+    aria-label="Delete cage"
+    (click)="deleteCage(data.id); $event.stopPropagation()"
+  >
+    <i class="fa fa-trash"></i>
+  </button>
+</div> -->
+<div
+  class="tile-item card"
+  (click)="onCardClick()"
+  (keydown.enter)="onCardClick()"
+  (keydown.space)="onCardClick()"
+  tabindex="0"
+  role="button"
+>
+  <span>{{ data.name }}</span>
+
+  <button class="delete-btn" type="button" (click)="onDeleteClick($event)">
+    <i class="fa fa-trash"></i>
+  </button>
 </div>

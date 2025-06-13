@@ -14,6 +14,7 @@
 }
 
 .tile-item {
+  position: relative; /* για να μπορέσει να κάνει absolute το delete-btn */
   width: 185px; // baseItemWidth
   height: 120px; // baseItemHeight
   flex: 0 0 auto; // Δεν grow/shrink, κρατάει το size του
@@ -34,6 +35,27 @@
 
 // Focus state για accessibility
 .card:focus {
+  outline: 2px solid #007acc;
+  outline-offset: 2px;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #c00;
+  transition: color 0.2s;
+}
+.delete-btn:hover {
+  color: #900;
+}
+
+.delete-btn:focus {
   outline: 2px solid #007acc;
   outline-offset: 2px;
 }

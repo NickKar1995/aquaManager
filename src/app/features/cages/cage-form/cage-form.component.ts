@@ -9,6 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DataService } from 'app/core/services/data/data.service';
 import { DxPopupModule } from 'devextreme-angular';
 import { DxTextBoxModule } from 'devextreme-angular';
 import { DxButtonModule } from 'devextreme-angular';
@@ -26,6 +27,8 @@ export class CageFormComponent implements OnInit {
   @Input() mode: 'create' | 'edit' = 'create';
   @Input() initialData: any = null;
   private formBuilder = inject(FormBuilder);
+  private dataService = inject(DataService);
+
   formSub!: FormGroup;
 
   ngOnInit() {
@@ -60,8 +63,11 @@ export class CageFormComponent implements OnInit {
     if (this.formSub.invalid) return;
     const payload = this.formSub.value;
     if (this.mode === 'create') {
+      this.dataService.addCage(payload);
       // κλήση Create API
     } else {
+      payload.id = this.initialData.id; // Προσθήκη του id στο payload για ενημέρωση
+      this.dataService.updateCage(payload)
       // κλήση Update API με this.initialData.id
     }
     this.closePopup();

@@ -1,26 +1,11 @@
-<!-- <p>cages works!</p>
-
-<dx-tile-view
-  #tileView
-  [height]="390"
-  [baseItemHeight]="120"
-  [baseItemWidth]="185"
-  width="100%"
-  [itemMargin]="10"
-  direction="horizontal"
->
-  @for(home of tileViewData; track home) {
-  <dxi-item class="card" [widthRatio]="home.widthRatio" [heightRatio]="home.heightRatio">
-    {{ home.text }}
-  </dxi-item>
+<!-- <div class="tiles-container">
+  @for(cage of cages(); track cage.id) {
+  <app-card (click)="editCage(cage)" [data]="cage" />
   }
-</dx-tile-view>
-
- -->
-
+</div> -->
 <div class="tiles-container">
-  @for(home of tileViewData; track home) {
-  <app-card (click)="editCage(home)" [data]="home" />
+  @for(cage of cages(); track cage.id) {
+  <app-card [data]="cage" (edit)="editCage($event)" (delete)="deleteCage($event.id)"> </app-card>
   }
 </div>
 

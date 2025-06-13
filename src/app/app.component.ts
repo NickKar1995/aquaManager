@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DxButtonModule } from 'devextreme-angular';
-import { DrawerComponent } from "./core/layout/drawer/drawer/drawer.component";
+import { DrawerComponent } from './core/layout/drawer/drawer.component';
 
 @Component({
   selector: 'app-root',
