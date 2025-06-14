@@ -1,0 +1,10 @@
+<h5>Select date for transfers</h5>
+<section class="date-input">
+  <app-date-box
+    [label]="'Select Date'"
+    [labelMode]="'floating'"
+    [type]="'date'"
+    [selectedDate]="selectedDate"
+    (dateChange)="onDateChange($event)"
+  ></app-date-box>
+</section>

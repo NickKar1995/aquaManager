@@ -21,4 +21,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/mortalities/mortalities.component').then((m) => m.MortalitiesComponent),
   },
+  {
+    path: 'fish-transfers',
+    loadComponent: () =>
+      import('./features/fish-transfers/fish-transfers.component').then((m) => m.FishTransfersComponent),
+  },
 ];

@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DateBoxComponent } from '../../shared/date-box/date-box.component';
-import { DataGridComponent } from '../fish-stocking/components/data-grid/data-grid.component';
+import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { DataService } from 'app/core/services/data/data.service';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { Mortality } from '@models';
@@ -10,6 +10,7 @@ import { Mortality } from '@models';
   imports: [DateBoxComponent, DataGridComponent],
   templateUrl: './mortalities.component.html',
   styleUrl: './mortalities.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MortalitiesComponent implements OnInit {
   private dataService = inject(DataService);
@@ -44,7 +45,7 @@ export class MortalitiesComponent implements OnInit {
     // Build grid data
     this.gridData = cagesWithStock.map((cage) => {
       const totalMortalities = existingMortalities
-        .filter(m => m.cageId === cage.id)
+        .filter((m) => m.cageId === cage.id)
         .reduce((sum, m) => sum + m.mortality, 0);
 
       return {

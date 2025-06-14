@@ -25,6 +25,8 @@ export class DrawerComponent {
     { text: 'Cages', icon: 'home', route: '/cages' },
     { text: 'Fish Stocking', icon: 'box', route: '/fish-stocking' },
     { text: 'Mortalities', icon: 'preferences', route: '/mortalities' },
+    { text: 'Fish Transfers', icon: 'home', route: '/fish-transfers' },
+
   ];
 
   buttonOptions: any = {
