@@ -4,12 +4,11 @@ import { Cage, Stocking, Mortality, Transfer } from '../../models';
 import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
-
   private notificationsService = inject(NotificationsService);
-  
+
   // Define signals for our data collections
   private cagesSignal = signal<Cage[]>([]);
   private stockingsSignal = signal<Stocking[]>([]);
@@ -87,12 +86,12 @@ export class DataService {
       this.stockingsSignal.set([]);
       this.mortalitiesSignal.set([]);
       this.transfersSignal.set([]);
-      
+
       localStorage.removeItem('fish-farm-cages');
       localStorage.removeItem('fish-farm-stockings');
       localStorage.removeItem('fish-farm-mortalities');
       localStorage.removeItem('fish-farm-transfers');
-      
+
       this.notificationsService.showSuccess('All data has been reset');
     } catch (error) {
       console.error('Error resetting data:', error);
@@ -104,7 +103,7 @@ export class DataService {
   addCage(cage: Cage): void {
     try {
       const newCage = { ...cage, id: this.generateId() };
-      this.cagesSignal.update(cages => [...cages, newCage]);
+      this.cagesSignal.update((cages) => [...cages, newCage]);
       this.notificationsService.showSuccess(`Cage "${newCage.name}" added successfully`);
     } catch (error) {
       console.error('Error adding cage:', error);
@@ -114,10 +113,10 @@ export class DataService {
 
   updateCage(updatedCage: Cage, showNotification: boolean = true): void {
     try {
-      this.cagesSignal.update(cages => 
-        cages.map(cage => cage.id === updatedCage.id ? updatedCage : cage)
+      this.cagesSignal.update((cages) =>
+        cages.map((cage) => (cage.id === updatedCage.id ? updatedCage : cage)),
       );
-      
+
       if (showNotification) {
         this.notificationsService.showSuccess(`Cage "${updatedCage.name}" updated successfully`);
       }
@@ -132,13 +131,13 @@ export class DataService {
   deleteCage(id: number): void {
     try {
       // Find the cage name before deleting
-      const cage = this.cagesSignal().find(c => c.id === id);
+      const cage = this.cagesSignal().find((c) => c.id === id);
       if (!cage) {
         this.notificationsService.showError(`Cage not found`);
         return;
       }
-      
-      this.cagesSignal.update(cages => cages.filter(c => c.id !== id));
+
+      this.cagesSignal.update((cages) => cages.filter((c) => c.id !== id));
       this.notificationsService.showSuccess(`Cage "${cage.name}" deleted successfully`);
     } catch (error) {
       console.error('Error deleting cage:', error);
@@ -148,12 +147,12 @@ export class DataService {
 
   // CRUD operations for stockings
   getStockingsByDate(date: Date): Stocking[] {
-    const sameDay = (d1: Date, d2: Date) => 
+    const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
       d1.getMonth() === d2.getMonth() &&
       d1.getDate() === d2.getDate();
-    
-    return this.stockingsSignal().filter(s => sameDay(new Date(s.date), date));
+
+    return this.stockingsSignal().filter((s) => sameDay(new Date(s.date), date));
   }
 
   // getAllCages(): Cage[] {
@@ -163,16 +162,16 @@ export class DataService {
   addStocking(stocking: Stocking): void {
     try {
       const newStocking = { ...stocking, id: this.generateId() };
-      this.stockingsSignal.update(stockings => [...stockings, newStocking]);
-      
+      this.stockingsSignal.update((stockings) => [...stockings, newStocking]);
+
       // Update cage status to 'stocked'
-      const cage = this.cagesSignal().find(c => c.id === stocking.cageId);
+      const cage = this.cagesSignal().find((c) => c.id === stocking.cageId);
       if (cage && cage.status === 'empty') {
-        this.updateCage({...cage, status: 'stocked'}, false);
+        this.updateCage({ ...cage, status: 'stocked' }, false);
       }
-      
+
       this.notificationsService.showSuccess(
-        `${newStocking.quantity} fish stocked to cage "${cage?.name || 'Unknown'}"`
+        `${newStocking.quantity} fish stocked to cage "${cage?.name || 'Unknown'}"`,
       );
     } catch (error) {
       console.error('Error adding stocking:', error);
@@ -182,13 +181,15 @@ export class DataService {
 
   updateStocking(updatedStocking: Stocking): void {
     try {
-      this.stockingsSignal.update(stockings => 
-        stockings.map(stocking => stocking.id === updatedStocking.id ? updatedStocking : stocking)
+      this.stockingsSignal.update((stockings) =>
+        stockings.map((stocking) =>
+          stocking.id === updatedStocking.id ? updatedStocking : stocking,
+        ),
       );
-      
-      const cage = this.cagesSignal().find(c => c.id === updatedStocking.cageId);
+
+      const cage = this.cagesSignal().find((c) => c.id === updatedStocking.cageId);
       this.notificationsService.showSuccess(
-        `Stocking updated for cage "${cage?.name || 'Unknown'}"`
+        `Stocking updated for cage "${cage?.name || 'Unknown'}"`,
       );
     } catch (error) {
       console.error('Error updating stocking:', error);
@@ -198,22 +199,22 @@ export class DataService {
 
   deleteStocking(id: number): void {
     try {
-      const stocking = this.stockingsSignal().find(s => s.id === id);
+      const stocking = this.stockingsSignal().find((s) => s.id === id);
       if (!stocking) {
         this.notificationsService.showError(`Stocking not found`);
         return;
       }
-      
-      const cage = this.cagesSignal().find(c => c.id === stocking.cageId);
-      
-      this.stockingsSignal.update(stockings => stockings.filter(s => s.id !== id));
+
+      const cage = this.cagesSignal().find((c) => c.id === stocking.cageId);
+
+      this.stockingsSignal.update((stockings) => stockings.filter((s) => s.id !== id));
       this.notificationsService.showSuccess(
-        `Stocking deleted from cage "${cage?.name || 'Unknown'}"`
+        `Stocking deleted from cage "${cage?.name || 'Unknown'}"`,
       );
-      
+
       // Check if the cage is now empty
       if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
-        this.updateCage({...cage, status: 'empty'}, false);
+        this.updateCage({ ...cage, status: 'empty' }, false);
       }
     } catch (error) {
       console.error('Error deleting stocking:', error);
@@ -223,27 +224,27 @@ export class DataService {
 
   // Similar CRUD operations for mortalities
   getMortalitiesByDate(date: Date): Mortality[] {
-    const sameDay = (d1: Date, d2: Date) => 
+    const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
       d1.getMonth() === d2.getMonth() &&
       d1.getDate() === d2.getDate();
-    
-    return this.mortalitiesSignal().filter(m => sameDay(new Date(m.date), date));
+
+    return this.mortalitiesSignal().filter((m) => sameDay(new Date(m.date), date));
   }
 
   addMortality(mortality: Mortality): void {
     try {
       const newMortality = { ...mortality, id: this.generateId() };
-      this.mortalitiesSignal.update(mortalities => [...mortalities, newMortality]);
-      
-      const cage = this.cagesSignal().find(c => c.id === mortality.cageId);
+      this.mortalitiesSignal.update((mortalities) => [...mortalities, newMortality]);
+
+      const cage = this.cagesSignal().find((c) => c.id === mortality.cageId);
       this.notificationsService.showSuccess(
-        `${newMortality.count} mortalities registered for cage "${cage?.name || 'Unknown'}"`
+        `${newMortality.mortality} mortalities registered for cage "${cage?.name || 'Unknown'}"`,
       );
-      
+
       // Check if the cage is now empty
       if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
-        this.updateCage({...cage, status: 'empty'}, false);
+        this.updateCage({ ...cage, status: 'empty' }, false);
       }
     } catch (error) {
       console.error('Error adding mortality:', error);
@@ -253,18 +254,20 @@ export class DataService {
 
   updateMortality(updatedMortality: Mortality): void {
     try {
-      this.mortalitiesSignal.update(mortalities => 
-        mortalities.map(mortality => mortality.id === updatedMortality.id ? updatedMortality : mortality)
+      this.mortalitiesSignal.update((mortalities) =>
+        mortalities.map((mortality) =>
+          mortality.id === updatedMortality.id ? updatedMortality : mortality,
+        ),
       );
-      
-      const cage = this.cagesSignal().find(c => c.id === updatedMortality.cageId);
+
+      const cage = this.cagesSignal().find((c) => c.id === updatedMortality.cageId);
       this.notificationsService.showSuccess(
-        `Mortality updated for cage "${cage?.name || 'Unknown'}"`
+        `Mortality updated for cage "${cage?.name || 'Unknown'}"`,
       );
-      
+
       // Check if the cage is now empty
       if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
-        this.updateCage({...cage, status: 'empty'}, false);
+        this.updateCage({ ...cage, status: 'empty' }, false);
       }
     } catch (error) {
       console.error('Error updating mortality:', error);
@@ -272,24 +275,31 @@ export class DataService {
     }
   }
 
+  getCagesWithStock(date: Date): Cage[] {
+    return this.cagesSignal().filter((cage) => {
+      const stockBalance = this.getStockBalance(cage.id, date);
+      return stockBalance > 0;
+    });
+  }
+
   deleteMortality(id: number): void {
     try {
-      const mortality = this.mortalitiesSignal().find(m => m.id === id);
+      const mortality = this.mortalitiesSignal().find((m) => m.id === id);
       if (!mortality) {
         this.notificationsService.showError(`Mortality not found`);
         return;
       }
-      
-      const cage = this.cagesSignal().find(c => c.id === mortality.cageId);
-      
-      this.mortalitiesSignal.update(mortalities => mortalities.filter(m => m.id !== id));
+
+      const cage = this.cagesSignal().find((c) => c.id === mortality.cageId);
+
+      this.mortalitiesSignal.update((mortalities) => mortalities.filter((m) => m.id !== id));
       this.notificationsService.showSuccess(
-        `Mortality deleted from cage "${cage?.name || 'Unknown'}"`
+        `Mortality deleted from cage "${cage?.name || 'Unknown'}"`,
       );
-      
+
       // Update cage status if it was previously empty but now has fish
       if (cage && cage.status === 'empty' && this.getStockBalance(cage.id, new Date()) > 0) {
-        this.updateCage({...cage, status: 'stocked'}, false);
+        this.updateCage({ ...cage, status: 'stocked' }, false);
       }
     } catch (error) {
       console.error('Error deleting mortality:', error);
@@ -299,48 +309,50 @@ export class DataService {
 
   // Similar CRUD operations for transfers
   getTransfersByDate(date: Date): Transfer[] {
-    const sameDay = (d1: Date, d2: Date) => 
+    const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
       d1.getMonth() === d2.getMonth() &&
       d1.getDate() === d2.getDate();
-    
-    return this.transfersSignal().filter(t => sameDay(new Date(t.date), date));
+
+    return this.transfersSignal().filter((t) => sameDay(new Date(t.date), date));
   }
 
   addTransfer(transfer: Transfer): void {
     try {
       const newTransfer = { ...transfer, id: this.generateId() };
-      this.transfersSignal.update(transfers => [...transfers, newTransfer]);
-      
+      this.transfersSignal.update((transfers) => [...transfers, newTransfer]);
+
       // Get source cage name
-      const sourceCage = this.cagesSignal().find(c => c.id === transfer.sourceCageId);
-      
+      const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
+
       // Get destination cage names
-      const destinationCages = transfer.destinations.map(dest => {
-        const cage = this.cagesSignal().find(c => c.id === dest.destinationCageId);
+      const destinationCages = transfer.destinations.map((dest) => {
+        const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
         return {
           name: cage?.name || 'Unknown',
-          quantity: dest.quantity
+          quantity: dest.quantity,
         };
       });
-      
+
       // Update destination cages to 'stocked' if they were empty
-      transfer.destinations.forEach(dest => {
-        const cage = this.cagesSignal().find(c => c.id === dest.destinationCageId);
+      transfer.destinations.forEach((dest) => {
+        const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
         if (cage && cage.status === 'empty') {
-          this.updateCage({...cage, status: 'stocked'}, false);
+          this.updateCage({ ...cage, status: 'stocked' }, false);
         }
       });
-      
+
       // Check if source cage is now empty and update status if needed
       const sourceBalance = this.getStockBalance(transfer.sourceCageId, new Date());
       if (sourceCage && sourceBalance === 0) {
-        this.updateCage({...sourceCage, status: 'empty'}, false);
+        this.updateCage({ ...sourceCage, status: 'empty' }, false);
       }
-      
+
       const totalTransferred = transfer.destinations.reduce((sum, dest) => sum + dest.quantity, 0);
       this.notificationsService.showSuccess(
-        `${totalTransferred} fish transferred from "${sourceCage?.name || 'Unknown'}" to ${destinationCages.length} cages`
+        `${totalTransferred} fish transferred from "${sourceCage?.name || 'Unknown'}" to ${
+          destinationCages.length
+        } cages`,
       );
     } catch (error) {
       console.error('Error adding transfer:', error);
@@ -350,15 +362,17 @@ export class DataService {
 
   updateTransfer(updatedTransfer: Transfer): void {
     try {
-      this.transfersSignal.update(transfers => 
-        transfers.map(transfer => transfer.id === updatedTransfer.id ? updatedTransfer : transfer)
+      this.transfersSignal.update((transfers) =>
+        transfers.map((transfer) =>
+          transfer.id === updatedTransfer.id ? updatedTransfer : transfer,
+        ),
       );
-      
-      const sourceCage = this.cagesSignal().find(c => c.id === updatedTransfer.sourceCageId);
+
+      const sourceCage = this.cagesSignal().find((c) => c.id === updatedTransfer.sourceCageId);
       this.notificationsService.showSuccess(
-        `Transfer from "${sourceCage?.name || 'Unknown'}" updated successfully`
+        `Transfer from "${sourceCage?.name || 'Unknown'}" updated successfully`,
       );
-      
+
       // Update cage statuses based on the updated transfer
       this.updateCageStatusesAfterTransfer(updatedTransfer);
     } catch (error) {
@@ -369,19 +383,19 @@ export class DataService {
 
   deleteTransfer(id: number): void {
     try {
-      const transfer = this.transfersSignal().find(t => t.id === id);
+      const transfer = this.transfersSignal().find((t) => t.id === id);
       if (!transfer) {
         this.notificationsService.showError(`Transfer not found`);
         return;
       }
-      
-      const sourceCage = this.cagesSignal().find(c => c.id === transfer.sourceCageId);
-      
-      this.transfersSignal.update(transfers => transfers.filter(t => t.id !== id));
+
+      const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
+
+      this.transfersSignal.update((transfers) => transfers.filter((t) => t.id !== id));
       this.notificationsService.showSuccess(
-        `Transfer from "${sourceCage?.name || 'Unknown'}" deleted successfully`
+        `Transfer from "${sourceCage?.name || 'Unknown'}" deleted successfully`,
       );
-      
+
       // Update cage statuses after deletion
       this.updateAllCageStatuses();
     } catch (error) {
@@ -394,37 +408,37 @@ export class DataService {
   private updateCageStatusesAfterTransfer(transfer: Transfer): void {
     // Check source cage
     const sourceBalance = this.getStockBalance(transfer.sourceCageId, new Date());
-    const sourceCage = this.cagesSignal().find(c => c.id === transfer.sourceCageId);
+    const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
     if (sourceCage) {
       if (sourceBalance === 0 && sourceCage.status === 'stocked') {
-        this.updateCage({...sourceCage, status: 'empty'}, false);
+        this.updateCage({ ...sourceCage, status: 'empty' }, false);
       } else if (sourceBalance > 0 && sourceCage.status === 'empty') {
-        this.updateCage({...sourceCage, status: 'stocked'}, false);
+        this.updateCage({ ...sourceCage, status: 'stocked' }, false);
       }
     }
-    
+
     // Check destination cages
-    transfer.destinations.forEach(dest => {
-      const cage = this.cagesSignal().find(c => c.id === dest.destinationCageId);
+    transfer.destinations.forEach((dest) => {
+      const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
       if (cage) {
         const balance = this.getStockBalance(cage.id, new Date());
         if (balance === 0 && cage.status === 'stocked') {
-          this.updateCage({...cage, status: 'empty'}, false);
+          this.updateCage({ ...cage, status: 'empty' }, false);
         } else if (balance > 0 && cage.status === 'empty') {
-          this.updateCage({...cage, status: 'stocked'}, false);
+          this.updateCage({ ...cage, status: 'stocked' }, false);
         }
       }
     });
   }
-  
+
   // Helper method to update all cage statuses
   private updateAllCageStatuses(): void {
     const today = new Date();
-    this.cagesSignal().forEach(cage => {
+    this.cagesSignal().forEach((cage) => {
       const balance = this.getStockBalance(cage.id, today);
       const newStatus = balance > 0 ? 'stocked' : 'empty';
       if (cage.status !== newStatus) {
-        this.updateCage({...cage, status: newStatus}, false);
+        this.updateCage({ ...cage, status: newStatus }, false);
       }
     });
   }
@@ -433,17 +447,17 @@ export class DataService {
   getStockBalance(cageId: number, date: Date): number {
     // Logic to calculate based on stockings, mortalities, and transfers
     const stockingsCount = this.stockingsSignal()
-      .filter(s => s.cageId === cageId && new Date(s.date) <= date)
+      .filter((s) => s.cageId === cageId && new Date(s.date) <= date)
       .reduce((sum, s) => sum + s.quantity, 0);
-    
+
     const mortalitiesCount = this.mortalitiesSignal()
-      .filter(m => m.cageId === cageId && new Date(m.date) <= date)
-      .reduce((sum, m) => sum + m.count, 0);
-    
+      .filter((m) => m.cageId === cageId && new Date(m.date) <= date)
+      .reduce((sum, m) => sum + m.mortality, 0);
+
     // Calculate transfers in and out
     const transfersOut = this.calculateTransfersOut(cageId, date);
     const transfersIn = this.calculateTransfersIn(cageId, date);
-    
+
     return stockingsCount - mortalitiesCount + transfersIn - transfersOut;
   }
 
@@ -451,41 +465,39 @@ export class DataService {
   getCagesWithBalance() {
     return computed(() => {
       const today = new Date();
-      return this.cagesSignal().map(cage => ({
+      return this.cagesSignal().map((cage) => ({
         ...cage,
-        currentBalance: this.getStockBalance(cage.id, today)
+        currentBalance: this.getStockBalance(cage.id, today),
       }));
     });
   }
 
   // Get empty cages for a specific date
   getEmptyCagesOnDate(date: Date) {
-    return this.cagesSignal().filter(cage => 
-      cage.status === 'empty' || 
-      this.getStockBalance(cage.id, date) === 0
+    return this.cagesSignal().filter(
+      (cage) => cage.status === 'empty' || this.getStockBalance(cage.id, date) === 0,
     );
   }
 
   // Get stocked cages for a specific date
   getStockedCages(date: Date) {
-    return this.cagesSignal().filter(cage => 
-      cage.status === 'stocked' && 
-      this.getStockBalance(cage.id, date) > 0
+    return this.cagesSignal().filter(
+      (cage) => cage.status === 'stocked' && this.getStockBalance(cage.id, date) > 0,
     );
   }
 
   private calculateTransfersOut(cageId: number, date: Date): number {
     return this.transfersSignal()
-      .filter(t => t.sourceCageId === cageId && new Date(t.date) <= date)
+      .filter((t) => t.sourceCageId === cageId && new Date(t.date) <= date)
       .reduce((sum, t) => sum + t.destinations.reduce((s, d) => s + d.quantity, 0), 0);
   }
 
   private calculateTransfersIn(cageId: number, date: Date): number {
     let total = 0;
     this.transfersSignal()
-      .filter(t => new Date(t.date) <= date)
-      .forEach(t => {
-        const destForCage = t.destinations.find(d => d.destinationCageId === cageId);
+      .filter((t) => new Date(t.date) <= date)
+      .forEach((t) => {
+        const destForCage = t.destinations.find((d) => d.destinationCageId === cageId);
         if (destForCage) {
           total += destForCage.quantity;
         }

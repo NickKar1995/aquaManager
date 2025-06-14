@@ -16,4 +16,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/fish-stocking/fish-stocking.component').then((m) => m.FishStockingComponent),
   },
+  {
+    path: 'mortalities',
+    loadComponent: () =>
+      import('./features/mortalities/mortalities.component').then((m) => m.MortalitiesComponent),
+  },
 ];

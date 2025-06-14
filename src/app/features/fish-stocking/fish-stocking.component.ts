@@ -4,9 +4,10 @@ import { DataGridComponent } from './components/data-grid/data-grid.component';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { DataService } from 'app/core/services/data/data.service';
 import { Cage, Stocking } from '@models';
+import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 
 @Component({
-  imports: [DxDateBoxModule, DataGridComponent, DataGridComponent],
+  imports: [DxDateBoxModule, DataGridComponent, DataGridComponent,DateBoxComponent],
   templateUrl: './fish-stocking.component.html',
   styleUrl: './fish-stocking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -24,7 +24,7 @@ export class DrawerComponent {
   menuItems = [
     { text: 'Cages', icon: 'home', route: '/cages' },
     { text: 'Fish Stocking', icon: 'box', route: '/fish-stocking' },
-    { text: 'Settings', icon: 'preferences', route: '/settings' },
+    { text: 'Mortalities', icon: 'preferences', route: '/mortalities' },
   ];
 
   buttonOptions: any = {
