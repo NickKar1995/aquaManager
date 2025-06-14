@@ -1,8 +1,3 @@
-<!-- <div class="tiles-container">
-  @for(cage of cages(); track cage.id) {
-  <app-card (click)="editCage(cage)" [data]="cage" />
-  }
-</div> -->
 <div class="tiles-container">
   @for(cage of cages(); track cage.id) {
   <app-card [data]="cage" (edit)="editCage($event)" (delete)="deleteCage($event.id)"> </app-card>

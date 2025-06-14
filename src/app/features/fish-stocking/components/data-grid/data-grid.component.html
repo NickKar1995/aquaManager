@@ -1,0 +1,17 @@
+<dx-data-grid
+  [columns]="columnsStructure"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [dataSource]="data"
+  [columnAutoWidth]="true"
+  [allowColumnResizing]="true"
+  [editing]="{
+    mode: 'cell',
+    allowUpdating: true,
+    useIcons: true
+  }"
+  (onRowUpdating)="onRowUpdating($event)"
+  (onRowUpdated)="onRowUpdated($event)"
+  id="dataGrid"
+>
+</dx-data-grid>

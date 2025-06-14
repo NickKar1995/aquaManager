@@ -1,1 +1,20 @@
-<p>fish-stocking works!</p>
+<section class="date-input">
+  <h5>Select Date</h5>
+  <dx-date-box
+    label="Select Date"
+    labelMode="floating"
+    type="date"
+    [(value)]="selectedDate"
+    (valueChange)="onDateChange($event)"
+  >
+  </dx-date-box>
+</section>
+
+<section class="grid">
+  <app-data-grid
+    (rowUpdating)="onGridRowUpdating($event)"
+    (rowUpdated)="onGridRowUpdated($event)"
+    [data]="gridData"
+    [columnsStructure]="columnsStructure"
+  ></app-data-grid>
+</section>

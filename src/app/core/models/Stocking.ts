@@ -3,5 +3,4 @@ export interface Stocking {
   cageId: number;
   date: Date;
   quantity: number;
-  fishType: string;
 }

@@ -156,6 +156,10 @@ export class DataService {
     return this.stockingsSignal().filter(s => sameDay(new Date(s.date), date));
   }
 
+  // getAllCages(): Cage[] {
+  //   return this.cages();
+  // }
+
   addStocking(stocking: Stocking): void {
     try {
       const newStocking = { ...stocking, id: this.generateId() };
@@ -168,7 +172,7 @@ export class DataService {
       }
       
       this.notificationsService.showSuccess(
-        `${newStocking.quantity} ${newStocking.fishType} fish stocked to cage "${cage?.name || 'Unknown'}"`
+        `${newStocking.quantity} fish stocked to cage "${cage?.name || 'Unknown'}"`
       );
     } catch (error) {
       console.error('Error adding stocking:', error);
@@ -455,7 +459,7 @@ export class DataService {
   }
 
   // Get empty cages for a specific date
-  getEmptyCages(date: Date) {
+  getEmptyCagesOnDate(date: Date) {
     return this.cagesSignal().filter(cage => 
       cage.status === 'empty' || 
       this.getStockBalance(cage.id, date) === 0
