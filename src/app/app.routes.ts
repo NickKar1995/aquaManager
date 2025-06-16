@@ -37,4 +37,11 @@ export const routes: Routes = [
         (m) => m.DailyStockBalanceComponent,
       ),
   },
+  {
+    path: 'pivot-analysis',
+    loadComponent: () =>
+      import('./features/pivot-analysis/pivot-analysis.component').then(
+        (m) => m.PivotAnalysisComponent,
+      ),
+  },
 ];

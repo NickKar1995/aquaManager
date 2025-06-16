@@ -27,6 +27,7 @@ export class DrawerComponent {
     { text: 'Mortalities', icon: 'preferences', route: '/mortalities' },
     { text: 'Fish Transfers', icon: 'home', route: '/fish-transfers' },
     { text: 'Daily Stock Balance', icon: 'home', route: '/daily-stock-balance' },
+    { text: 'Pivot Analysis', icon: 'box', route: '/pivot-analysis' },
   ];
 
   buttonOptions: any = {
