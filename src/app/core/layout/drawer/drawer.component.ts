@@ -26,7 +26,7 @@ export class DrawerComponent {
     { text: 'Fish Stocking', icon: 'box', route: '/fish-stocking' },
     { text: 'Mortalities', icon: 'preferences', route: '/mortalities' },
     { text: 'Fish Transfers', icon: 'home', route: '/fish-transfers' },
-
+    { text: 'Daily Stock Balance', icon: 'home', route: '/daily-stock-balance' },
   ];
 
   buttonOptions: any = {

@@ -14,7 +14,9 @@ export const routes: Routes = [
   {
     path: 'fish-stocking',
     loadComponent: () =>
-      import('./features/fish-stocking/fish-stocking.component').then((m) => m.FishStockingComponent),
+      import('./features/fish-stocking/fish-stocking.component').then(
+        (m) => m.FishStockingComponent,
+      ),
   },
   {
     path: 'mortalities',
@@ -24,6 +26,15 @@ export const routes: Routes = [
   {
     path: 'fish-transfers',
     loadComponent: () =>
-      import('./features/fish-transfers/fish-transfers.component').then((m) => m.FishTransfersComponent),
+      import('./features/fish-transfers/fish-transfers.component').then(
+        (m) => m.FishTransfersComponent,
+      ),
+  },
+  {
+    path: 'daily-stock-balance',
+    loadComponent: () =>
+      import('./features/daily-stock-balance/daily-stock-balance.component').then(
+        (m) => m.DailyStockBalanceComponent,
+      ),
   },
 ];

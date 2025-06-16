@@ -1,0 +1,14 @@
+<h5>Select date for balance snapshot</h5>
+<section class="date-input">
+  <app-date-box
+    [label]="'Select Date'"
+    [labelMode]="'floating'"
+    [type]="'date'"
+    [selectedDate]="selectedDate()"
+    (dateChange)="onDateChange($event)"
+  ></app-date-box>
+</section>
+
+<section class="grid">
+  <app-data-grid [data]="gridData()" [columnsStructure]="columnsStructure"></app-data-grid>
+</section>

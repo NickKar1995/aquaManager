@@ -416,12 +416,12 @@ export class DataService {
   }
 
   // Get all cages with their current stock balance
-  getCagesWithBalance() {
+  getCagesWithBalance(date: Date) {
     return computed(() => {
-      const today = new Date();
+      // const today = new Date();
       return this.cagesSignal().map((cage) => ({
         ...cage,
-        currentBalance: this.getStockBalance(cage.id, today),
+        currentBalance: this.getStockBalance(cage.id, date),
       }));
     });
   }
