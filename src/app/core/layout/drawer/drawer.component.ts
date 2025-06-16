@@ -1,8 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DxDrawerModule } from 'devextreme-angular';
-import { DxToolbarModule, DxTextBoxModule, DxListModule } from 'devextreme-angular';
-import { ItemClickEvent } from 'devextreme/ui/list';
+import { ButtonOptions, MENU_ITEMS, MenuItem } from '@models';
+import { DxToolbarModule, DxTextBoxModule, DxListModule, DxDrawerModule } from 'devextreme-angular';
 
 @Component({
   selector: 'app-drawer',
@@ -12,32 +11,20 @@ import { ItemClickEvent } from 'devextreme/ui/list';
 })
 export class DrawerComponent {
   private readonly MOBILE_BREAKPOINT = 768;
+  menuItems: MenuItem[] = MENU_ITEMS;
   isDrawerOpen = true;
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (event.target.innerWidth <= this.MOBILE_BREAKPOINT) {
-      this.isDrawerOpen = false;
-    }
-  }
-
-  menuItems = [
-    { text: 'Cages', icon: 'home', route: '/cages' },
-    { text: 'Fish Stocking', icon: 'box', route: '/fish-stocking' },
-    { text: 'Mortalities', icon: 'preferences', route: '/mortalities' },
-    { text: 'Fish Transfers', icon: 'home', route: '/fish-transfers' },
-    { text: 'Daily Stock Balance', icon: 'home', route: '/daily-stock-balance' },
-    { text: 'Pivot Analysis', icon: 'box', route: '/pivot-analysis' },
-  ];
-
-  buttonOptions: any = {
+  buttonOptions: ButtonOptions = {
     icon: 'menu',
     onClick: () => {
       this.isDrawerOpen = !this.isDrawerOpen;
     },
   };
 
-  onNavigationItemClick($event: ItemClickEvent) {
-    throw new Error('Method not implemented.');
+  @HostListener('window:resize', ['$event'])
+  onResize(event: UIEvent) {
+    const target = event.target as Window;
+    if (target.innerWidth <= this.MOBILE_BREAKPOINT) {
+      this.isDrawerOpen = false;
+    }
   }
 }
