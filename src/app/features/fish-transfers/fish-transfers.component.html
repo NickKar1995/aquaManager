@@ -8,3 +8,25 @@
     (dateChange)="onDateChange($event)"
   ></app-date-box>
 </section>
+
+<section class="actions">
+  <dx-button type="default" text="Add transfer" (onClick)="addTransfer()"></dx-button>
+</section>
+
+<section class="grid">
+  <app-data-grid [data]="gridData" [columnsStructure]="columnsStructure"></app-data-grid>
+</section>
+
+<app-transfer-form
+  (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
+  (transferAdded)="onTransferAdded($event)"
+  [isPopupVisible]="isPopupVisible"
+  [columnsStructure]="columnsStructureInput"
+></app-transfer-form>
+
+<!-- <app-cage-form
+  (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
+  [isPopupVisible]="isPopupVisible"
+  [initialData]="selectedData"
+  [mode]="mode"
+/> -->

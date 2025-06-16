@@ -145,6 +145,10 @@ export class DataService {
     }
   }
 
+  getCageById(id: number): Cage | undefined {
+    return this.cagesSignal().find((cage) => cage.id === id);
+  }
+
   // CRUD operations for stockings
   getStockingsByDate(date: Date): Stocking[] {
     const sameDay = (d1: Date, d2: Date) =>
@@ -194,31 +198,6 @@ export class DataService {
     } catch (error) {
       console.error('Error updating stocking:', error);
       this.notificationsService.showError(`Failed to update stocking`);
-    }
-  }
-
-  deleteStocking(id: number): void {
-    try {
-      const stocking = this.stockingsSignal().find((s) => s.id === id);
-      if (!stocking) {
-        this.notificationsService.showError(`Stocking not found`);
-        return;
-      }
-
-      const cage = this.cagesSignal().find((c) => c.id === stocking.cageId);
-
-      this.stockingsSignal.update((stockings) => stockings.filter((s) => s.id !== id));
-      this.notificationsService.showSuccess(
-        `Stocking deleted from cage "${cage?.name || 'Unknown'}"`,
-      );
-
-      // Check if the cage is now empty
-      if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
-        this.updateCage({ ...cage, status: 'empty' }, false);
-      }
-    } catch (error) {
-      console.error('Error deleting stocking:', error);
-      this.notificationsService.showError(`Failed to delete stocking`);
     }
   }
 
@@ -280,31 +259,6 @@ export class DataService {
       const stockBalance = this.getStockBalance(cage.id, date);
       return stockBalance > 0;
     });
-  }
-
-  deleteMortality(id: number): void {
-    try {
-      const mortality = this.mortalitiesSignal().find((m) => m.id === id);
-      if (!mortality) {
-        this.notificationsService.showError(`Mortality not found`);
-        return;
-      }
-
-      const cage = this.cagesSignal().find((c) => c.id === mortality.cageId);
-
-      this.mortalitiesSignal.update((mortalities) => mortalities.filter((m) => m.id !== id));
-      this.notificationsService.showSuccess(
-        `Mortality deleted from cage "${cage?.name || 'Unknown'}"`,
-      );
-
-      // Update cage status if it was previously empty but now has fish
-      if (cage && cage.status === 'empty' && this.getStockBalance(cage.id, new Date()) > 0) {
-        this.updateCage({ ...cage, status: 'stocked' }, false);
-      }
-    } catch (error) {
-      console.error('Error deleting mortality:', error);
-      this.notificationsService.showError(`Failed to delete mortality`);
-    }
   }
 
   // Similar CRUD operations for transfers
@@ -381,28 +335,28 @@ export class DataService {
     }
   }
 
-  deleteTransfer(id: number): void {
-    try {
-      const transfer = this.transfersSignal().find((t) => t.id === id);
-      if (!transfer) {
-        this.notificationsService.showError(`Transfer not found`);
-        return;
-      }
+  // deleteTransfer(id: number): void {
+  //   try {
+  //     const transfer = this.transfersSignal().find((t) => t.id === id);
+  //     if (!transfer) {
+  //       this.notificationsService.showError(`Transfer not found`);
+  //       return;
+  //     }
 
-      const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
+  //     const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
 
-      this.transfersSignal.update((transfers) => transfers.filter((t) => t.id !== id));
-      this.notificationsService.showSuccess(
-        `Transfer from "${sourceCage?.name || 'Unknown'}" deleted successfully`,
-      );
+  //     this.transfersSignal.update((transfers) => transfers.filter((t) => t.id !== id));
+  //     this.notificationsService.showSuccess(
+  //       `Transfer from "${sourceCage?.name || 'Unknown'}" deleted successfully`,
+  //     );
 
-      // Update cage statuses after deletion
-      this.updateAllCageStatuses();
-    } catch (error) {
-      console.error('Error deleting transfer:', error);
-      this.notificationsService.showError(`Failed to delete transfer`);
-    }
-  }
+  //     // Update cage statuses after deletion
+  //     this.updateAllCageStatuses();
+  //   } catch (error) {
+  //     console.error('Error deleting transfer:', error);
+  //     this.notificationsService.showError(`Failed to delete transfer`);
+  //   }
+  // }
 
   // Helper method to update cage statuses after a transfer
   private updateCageStatusesAfterTransfer(transfer: Transfer): void {

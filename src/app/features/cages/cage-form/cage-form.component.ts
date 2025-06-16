@@ -10,9 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from 'app/core/services/data/data.service';
-import { DxPopupModule } from 'devextreme-angular';
-import { DxTextBoxModule } from 'devextreme-angular';
-import { DxButtonModule } from 'devextreme-angular';
+import { DxPopupModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angular';
 
 @Component({
   selector: 'app-cage-form',
@@ -23,9 +21,10 @@ import { DxButtonModule } from 'devextreme-angular';
 })
 export class CageFormComponent implements OnInit {
   @Input() isPopupVisible = false;
-  @Output() popupVisibilityChanged = new EventEmitter<boolean>();
   @Input() mode: 'create' | 'edit' = 'create';
   @Input() initialData: any = null;
+  @Output() popupVisibilityChanged = new EventEmitter<boolean>();
+
   private formBuilder = inject(FormBuilder);
   private dataService = inject(DataService);
 
@@ -33,8 +32,7 @@ export class CageFormComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    console.log(this.initialData)
-
+    console.log(this.initialData);
   }
 
   private initForm() {
@@ -46,7 +44,7 @@ export class CageFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.initialData)
+    console.log(this.initialData);
     // Ελέγχουμε αν το isPopupVisible έχει αλλάξε
     // Όταν ανοίγει το popup με δεδομένα edit, γεμίζουμε το form
     if (changes['initialData'] && this.initialData) {
@@ -58,7 +56,6 @@ export class CageFormComponent implements OnInit {
     }
   }
 
-  
   onSubmit() {
     if (this.formSub.invalid) return;
     const payload = this.formSub.value;
@@ -67,7 +64,7 @@ export class CageFormComponent implements OnInit {
       // κλήση Create API
     } else {
       payload.id = this.initialData.id; // Προσθήκη του id στο payload για ενημέρωση
-      this.dataService.updateCage(payload)
+      this.dataService.updateCage(payload);
       // κλήση Update API με this.initialData.id
     }
     this.closePopup();

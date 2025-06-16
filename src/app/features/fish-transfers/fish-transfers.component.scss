@@ -1,8 +1,14 @@
 .date-input {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   max-width: 200px;
 }
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
 h5 {
   margin: 0px;
   padding-left: 5px;

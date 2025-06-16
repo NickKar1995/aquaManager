@@ -1,0 +1,50 @@
+<dx-popup
+  (onHiding)="closePopup()"
+  [hideOnOutsideClick]="true"
+  [(visible)]="isPopupVisible"
+  contentTemplate="popup-content"
+>
+  <div *dxTemplate="let data of 'popup-content'">
+    <form [formGroup]="formSub">
+      <dx-select-box
+        [dataSource]="filledCages"
+        displayExpr="name"
+        valueExpr="id"
+        placeholder="Select source cage"
+        formControlName="cageSource"
+        (onValueChanged)="onSourceCageChange($event)"
+      ></dx-select-box>
+      <!-- ? -->
+      <!-- 
+      <dx-tag-box
+        [dataSource]="availableTargetCages"
+        displayExpr="name"
+        valueExpr="id"
+        formControlName="targetCages"
+        placeholder="Select target cages"
+      ></dx-tag-box>
+
+      <dx-number-box
+        formControlName="amount"
+        placeholder="Amount to transfer"
+        label="Amount"
+        [min]="1"
+        labelMode="floating"
+      ></dx-number-box> -->
+
+      <!-- ? -->
+
+      <section class="grid">
+        <app-data-grid
+          (rowUpdating)="onGridRowUpdating($event)"
+          (rowUpdated)="onGridRowUpdated($event)"
+          [data]="availableTargetCages"
+          [columnsStructure]="columnsStructure"
+        ></app-data-grid>
+      </section>
+    </form>
+    <div class="buttons">
+      <dx-button type="success" text="Add transfer" (onClick)="onSubmit()"> </dx-button>
+    </div>
+  </div>
+</dx-popup>
