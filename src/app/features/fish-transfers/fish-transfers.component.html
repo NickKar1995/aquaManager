@@ -9,12 +9,12 @@
   ></app-date-box>
 </section>
 
-<section class="actions">
-  <dx-button type="default" text="Add transfer" (onClick)="addTransfer()"></dx-button>
-</section>
-
 <section class="grid">
   <app-data-grid [data]="gridData" [columnsStructure]="columnsStructure"></app-data-grid>
+</section>
+
+<section class="actions">
+  <dx-button type="default" text="Add transfer" (onClick)="addTransfer()"></dx-button>
 </section>
 
 <app-transfer-form

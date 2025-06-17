@@ -27,7 +27,7 @@ export class NotificationsService {
   }
 
   showError(message: string): void {
-    this.show(message, 'error', 5000); // Longer duration for errors
+    this.show(message, 'error', 5000);
   }
 
   showWarning(message: string): void {
