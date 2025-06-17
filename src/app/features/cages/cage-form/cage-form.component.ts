@@ -34,7 +34,6 @@ export class CageFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.initForm();
-    console.log(this.initialData);
   }
 
   private initForm() {
@@ -46,7 +45,6 @@ export class CageFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.initialData);
     // Ελέγχουμε αν το isPopupVisible έχει αλλάξε
     // Όταν ανοίγει το popup με δεδομένα edit, γεμίζουμε το form
     if (changes['initialData'] && this.initialData) {

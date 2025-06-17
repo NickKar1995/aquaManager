@@ -62,8 +62,6 @@ export class TransferFormComponent implements OnInit {
       const formData = this.formSub.value;
       const sourceCageId = formData.cageSource;
 
-      console.log('Form data:', formData, sourceCageId);
-      // Φιλτράρουμε μόνο τα επιλεγμένα cages με ποσότητα > 0
       const selectedTargets = formData.targetCagesArray
         .filter((target: Stocking) => target.quantity > 0)
         .map((target: DestinationCage) => ({
@@ -72,7 +70,6 @@ export class TransferFormComponent implements OnInit {
         }));
 
       if (selectedTargets.length === 0) {
-        // Εμφάνιση μηνύματος σφάλματος αν δεν έχουν επιλεγεί cages
         alert('Please select at least one target cage with quantity greater than 0');
         return;
       }
@@ -85,7 +82,6 @@ export class TransferFormComponent implements OnInit {
         destinations: selectedTargets,
       };
 
-      console.log('Transfer data:', transfer);
 
       // Κλήση του service για αποθήκευση της μεταφοράς
       this.dataService.addTransfer(transfer);

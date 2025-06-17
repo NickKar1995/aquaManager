@@ -36,7 +36,10 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.pivotGrid.instance.bindChart(this.chart.instance, {});
+    this.pivotGrid.instance.bindChart(this.chart.instance, {
+      dataFieldsDisplayMode: 'splitPanes',
+      alternateDataFields: false,
+    });
   }
 
   private configurePivotGrid() {

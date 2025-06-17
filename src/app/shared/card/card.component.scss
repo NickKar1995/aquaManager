@@ -1,23 +1,23 @@
 .card {
   display: flex;
-  flex-direction: column; // Arrange content vertically
-  justify-content: center; // Center content vertically
-  align-items: center; // Center content horizontally
-  height: 100%; // Make sure the card fills the tile's height
-  width: 100%; // Make sure the card fills the tile's width
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
   padding: 10px;
   box-sizing: border-box;
   background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center; // For text inside
+  text-align: center;
 }
 
 .tile-item {
-  position: relative; /* για να μπορέσει να κάνει absolute το delete-btn */
-  width: 185px; // baseItemWidth
-  height: 120px; // baseItemHeight
-  flex: 0 0 auto; // Δεν grow/shrink, κρατάει το size του
+  position: relative;
+  width: 185px;
+  height: 120px;
+  flex: 0 0 auto;
 }
 
 .card:hover {
@@ -26,7 +26,6 @@
   transform: translateY(-2px);
   cursor: pointer;
 }
-// Active/pressed state
 .card:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

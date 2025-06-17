@@ -1,7 +1,49 @@
 .mortality-analysis-container {
   padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  h2 {
+    margin: 0 0 1rem 0;
+    flex-shrink: 0;
+  }
+
+  dx-pivot-grid {
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+    overflow: auto;
+  }
 
   .chart {
-    margin-top: 2rem;
+    flex: 1;
+    min-height: 200px;
+    width: 100%;
+
+    @media (max-height: 800px) {
+      min-height: 150px;
+    }
+
+    @media (max-height: 600px) {
+      min-height: 120px;
+    }
+
+    @media (max-height: 500px) {
+      min-height: 100px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chart {
+      min-height: 180px;
+    }
   }
 }

@@ -31,7 +31,6 @@ export class CagesComponent {
   }
 
   editCage(data: Cage) {
-    console.log(data);
     this.mode = 'edit';
     this.selectedData = data;
     this.isPopupVisible = true;

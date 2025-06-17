@@ -1,4 +1,3 @@
-// services/data.service.ts
 import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { Cage, Stocking, Mortality, Transfer } from '../../models';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -9,23 +8,19 @@ import { NotificationsService } from '../notifications/notifications.service';
 export class DataService {
   private notificationsService = inject(NotificationsService);
 
-  // Define signals for our data collections
   private cagesSignal = signal<Cage[]>([]);
   private stockingsSignal = signal<Stocking[]>([]);
   private mortalitiesSignal = signal<Mortality[]>([]);
   private transfersSignal = signal<Transfer[]>([]);
 
-  // Expose read-only signals for components to consume
   public cages = this.cagesSignal.asReadonly();
   public stockings = this.stockingsSignal.asReadonly();
   public mortalities = this.mortalitiesSignal.asReadonly();
   public transfers = this.transfersSignal.asReadonly();
 
   constructor() {
-    // Load initial data from localStorage
     this.loadFromLocalStorage();
 
-    // Set up effects to save data whenever it changes
     effect(() => {
       localStorage.setItem('fish-farm-cages', JSON.stringify(this.cagesSignal()));
     });
@@ -45,25 +40,21 @@ export class DataService {
 
   private loadFromLocalStorage(): void {
     try {
-      // Load cages
       const cagesData = localStorage.getItem('fish-farm-cages');
       if (cagesData) {
         this.cagesSignal.set(JSON.parse(cagesData));
       }
 
-      // Load stockings
       const stockingsData = localStorage.getItem('fish-farm-stockings');
       if (stockingsData) {
         this.stockingsSignal.set(JSON.parse(stockingsData));
       }
 
-      // Load mortalities
       const mortalitiesData = localStorage.getItem('fish-farm-mortalities');
       if (mortalitiesData) {
         this.mortalitiesSignal.set(JSON.parse(mortalitiesData));
       }
 
-      // Load transfers
       const transfersData = localStorage.getItem('fish-farm-transfers');
       if (transfersData) {
         this.transfersSignal.set(JSON.parse(transfersData));
@@ -71,7 +62,7 @@ export class DataService {
     } catch (error) {
       console.error('Error loading data from localStorage:', error);
       this.notificationsService.showError('Failed to load data from storage');
-      // If there's an error, initialize with empty arrays
+
       this.cagesSignal.set([]);
       this.stockingsSignal.set([]);
       this.mortalitiesSignal.set([]);
@@ -79,7 +70,6 @@ export class DataService {
     }
   }
 
-  // Helper method to reset all data (useful for testing)
   resetAllData(): void {
     try {
       this.cagesSignal.set([]);
@@ -99,7 +89,6 @@ export class DataService {
     }
   }
 
-  // CRUD operations for cages
   addCage(cage: Cage): void {
     try {
       const newCage = { ...cage, id: this.generateId() };
@@ -335,30 +324,6 @@ export class DataService {
     }
   }
 
-  // deleteTransfer(id: number): void {
-  //   try {
-  //     const transfer = this.transfersSignal().find((t) => t.id === id);
-  //     if (!transfer) {
-  //       this.notificationsService.showError(`Transfer not found`);
-  //       return;
-  //     }
-
-  //     const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
-
-  //     this.transfersSignal.update((transfers) => transfers.filter((t) => t.id !== id));
-  //     this.notificationsService.showSuccess(
-  //       `Transfer from "${sourceCage?.name || 'Unknown'}" deleted successfully`,
-  //     );
-
-  //     // Update cage statuses after deletion
-  //     this.updateAllCageStatuses();
-  //   } catch (error) {
-  //     console.error('Error deleting transfer:', error);
-  //     this.notificationsService.showError(`Failed to delete transfer`);
-  //   }
-  // }
-
-  // Helper method to update cage statuses after a transfer
   private updateCageStatusesAfterTransfer(transfer: Transfer): void {
     // Check source cage
     const sourceBalance = this.getStockBalance(transfer.sourceCageId, new Date());
