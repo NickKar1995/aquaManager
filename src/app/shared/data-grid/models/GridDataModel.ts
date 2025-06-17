@@ -4,7 +4,6 @@ import { TransferGridRow } from 'app/features/fish-transfers/models/TransferGrid
 import { MortalityGridRow } from 'app/features/mortalities/models/MortalityGridRow';
 import { Cage } from '@models';
 
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
 export type GridDataModel =
   | Cage[]
   | DefaultDataModel[]
