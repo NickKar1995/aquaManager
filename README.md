@@ -1,59 +1,136 @@
-# AquaManager
+# Aquaculture Production Management UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.13.
+<p align="center"><a href="https://devexpress.github.io/devextreme-angular/" target="_blank"><img src="https://skillicons.dev/icons?i=angular" /></a></p>
 
-## Development server
+A modern, dynamic, business-grade Angular application that simulates the core workflows of an aquaculture production environment, tailored for performance, modularity, and user experience.
 
-To start a local development server, run:
+## 🌟 Objective
+
+To showcase real-world front-end architecture and implementation of a fish farm management system with:
+
+* Fully interactive cage and fish operations
+* Advanced grid-based UIs
+* Real-time, reactive state management
+* Scalability-focused architecture
+
+---
+
+## 🔧 Tech Stack
+
+* **Angular** (v19.2.0) – Modern web framework
+* **DevExtreme** – UI library for all forms, grids & pivot charts
+* **Angular Signals** – Reactive state and computed values
+* **LocalStorage** – For persistent mock data
+* **Prettier & ESLint** – Configured for consistency, scalability, and team collaboration
+
+---
+
+## ⚙️ Key Features
+
+### 🪝 Signals-Driven Reactive Architecture
+
+* Used Angular Signals across the app for reactive state flow.
+* Achieved fine-grained reactivity and fully declarative updates without RxJS boilerplate.
+
+### 🧱 Modular Structure
+
+* Feature-based folders with lazy-loaded modules
+* Shared UI and logic layers
+* Clear separation between components, services, and domain logic
+
+### 💥 Lazy Loading with Smart Preloading
+
+* Each core domain (Cages, Stocking, Mortality, Transfers, Analysis) is a standalone lazy module
+* PreloadingStrategy implemented to anticipate user flows for instant interaction
+
+### 📊 DevExtreme Power
+
+* All views powered by DevExtreme DataGrid, Forms, PivotGrid, and Chart widgets
+* In-place editing, validation, error states, and visual feedback using the DevExtreme reactive API
+
+### 🧠 Core Business Rules Enforced
+
+* Real-time validation prevents invalid fish transfers
+* Stock balances never drop below 0
+* Visual warnings and UI blocks when business constraints are violated
+
+### 📈 Pivot-Style Mortality Dashboard
+
+* Drag-and-drop pivot controls
+* Breakdown by cage, month, or year
+* Insights powered directly from transactional data with no backend snapshots
+
+---
+
+## 🗂️ Project Structure
+
+```
+/src
+├── app
+│   ├── core/                 # Singleton services, interceptors
+│   ├── shared/               # Reusable UI and utility components
+│   └── features/             # Feature modules
+│       ├── cages/            
+│       ├── daily-stock-balance/
+│       ├── fish-stocking/
+│       ├── fish-transfers/
+│       ├── mortalities/
+│       └── pivot-analysis/
+```
+
+---
+
+## 🧺 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/NickKar1995/aquaManager.git
+cd aquaManager
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start development server
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 4. Build for production
 
 ```bash
-ng generate component component-name
+ng build --configuration production
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🤖 AI Tools Used
 
-## Building
+* **Claude** – Assisted with architectural suggestions, UX polish ideas, and TypeScript helpers.
+* **Gemini** – Evaluated thought process on complex data structure analysis.
 
-To build the project run:
+All code has been reviewed, optimized, and understood by me.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## ✅ Evaluation Highlights
 
-## Running unit tests
+* ✅ Fully working, feature-rich Angular UI
+* ✅ Stock logic, validation, and dynamic behavior implemented end-to-end
+* ✅ Strong UX focus with minimal friction
+* ✅ Built for extensibility, scalability, and real-world adaptation
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
+## 📃 License
 
-## Running end-to-end tests
+This project is provided as a technical demonstration and is free to use for evaluation and educational purposes.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Enjoy building and managing your digital fish farm ecosystem! 🐟🌊
