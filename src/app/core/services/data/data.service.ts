@@ -119,7 +119,6 @@ export class DataService {
 
   deleteCage(id: number): void {
     try {
-      // Find the cage name before deleting
       const cage = this.cagesSignal().find((c) => c.id === id);
       if (!cage) {
         this.notificationsService.showError(`Cage not found`);
@@ -137,8 +136,6 @@ export class DataService {
   getCageById(id: number): Cage | undefined {
     return this.cagesSignal().find((cage) => cage.id === id);
   }
-
-  // CRUD operations for stockings
   getStockingsByDate(date: Date): Stocking[] {
     const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
@@ -148,16 +145,10 @@ export class DataService {
     return this.stockingsSignal().filter((s) => sameDay(new Date(s.date), date));
   }
 
-  // getAllCages(): Cage[] {
-  //   return this.cages();
-  // }
-
   addStocking(stocking: Stocking): void {
     try {
       const newStocking = { ...stocking, id: this.generateId() };
       this.stockingsSignal.update((stockings) => [...stockings, newStocking]);
-
-      // Update cage status to 'stocked'
       const cage = this.cagesSignal().find((c) => c.id === stocking.cageId);
       if (cage && cage.status === 'empty') {
         this.updateCage({ ...cage, status: 'stocked' }, false);
@@ -189,8 +180,6 @@ export class DataService {
       this.notificationsService.showError(`Failed to update stocking`);
     }
   }
-
-  // Similar CRUD operations for mortalities
   getMortalitiesByDate(date: Date): Mortality[] {
     const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
@@ -209,8 +198,6 @@ export class DataService {
       this.notificationsService.showSuccess(
         `${newMortality.mortality} mortalities registered for cage "${cage?.name || 'Unknown'}"`,
       );
-
-      // Check if the cage is now empty
       if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
         this.updateCage({ ...cage, status: 'empty' }, false);
       }
@@ -232,8 +219,6 @@ export class DataService {
       this.notificationsService.showSuccess(
         `Mortality updated for cage "${cage?.name || 'Unknown'}"`,
       );
-
-      // Check if the cage is now empty
       if (cage && this.getStockBalance(cage.id, new Date()) === 0) {
         this.updateCage({ ...cage, status: 'empty' }, false);
       }
@@ -249,8 +234,6 @@ export class DataService {
       return stockBalance > 0;
     });
   }
-
-  // Similar CRUD operations for transfers
   getTransfersByDate(date: Date): Transfer[] {
     const sameDay = (d1: Date, d2: Date) =>
       d1.getFullYear() === d2.getFullYear() &&
@@ -264,11 +247,7 @@ export class DataService {
     try {
       const newTransfer = { ...transfer, id: this.generateId() };
       this.transfersSignal.update((transfers) => [...transfers, newTransfer]);
-
-      // Get source cage name
       const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
-
-      // Get destination cage names
       const destinationCages = transfer.destinations.map((dest) => {
         const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
         return {
@@ -276,16 +255,12 @@ export class DataService {
           quantity: dest.quantity,
         };
       });
-
-      // Update destination cages to 'stocked' if they were empty
       transfer.destinations.forEach((dest) => {
         const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
         if (cage && cage.status === 'empty') {
           this.updateCage({ ...cage, status: 'stocked' }, false);
         }
       });
-
-      // Check if source cage is now empty and update status if needed
       const sourceBalance = this.getStockBalance(transfer.sourceCageId, new Date());
       if (sourceCage && sourceBalance === 0) {
         this.updateCage({ ...sourceCage, status: 'empty' }, false);
@@ -315,8 +290,6 @@ export class DataService {
       this.notificationsService.showSuccess(
         `Transfer from "${sourceCage?.name || 'Unknown'}" updated successfully`,
       );
-
-      // Update cage statuses based on the updated transfer
       this.updateCageStatusesAfterTransfer(updatedTransfer);
     } catch (error) {
       console.error('Error updating transfer:', error);
@@ -325,7 +298,6 @@ export class DataService {
   }
 
   private updateCageStatusesAfterTransfer(transfer: Transfer): void {
-    // Check source cage
     const sourceBalance = this.getStockBalance(transfer.sourceCageId, new Date());
     const sourceCage = this.cagesSignal().find((c) => c.id === transfer.sourceCageId);
     if (sourceCage) {
@@ -335,8 +307,6 @@ export class DataService {
         this.updateCage({ ...sourceCage, status: 'stocked' }, false);
       }
     }
-
-    // Check destination cages
     transfer.destinations.forEach((dest) => {
       const cage = this.cagesSignal().find((c) => c.id === dest.destinationCageId);
       if (cage) {
@@ -349,8 +319,6 @@ export class DataService {
       }
     });
   }
-
-  // Helper method to update all cage statuses
   private updateAllCageStatuses(): void {
     const today = new Date();
     this.cagesSignal().forEach((cage) => {
@@ -361,10 +329,7 @@ export class DataService {
       }
     });
   }
-
-  // Helper method to calculate stock balance for a cage on a specific date
   getStockBalance(cageId: number, date: Date): number {
-    // Logic to calculate based on stockings, mortalities, and transfers
     const stockingsCount = this.stockingsSignal()
       .filter((s) => s.cageId === cageId && new Date(s.date) <= date)
       .reduce((sum, s) => sum + s.quantity, 0);
@@ -372,33 +337,24 @@ export class DataService {
     const mortalitiesCount = this.mortalitiesSignal()
       .filter((m) => m.cageId === cageId && new Date(m.date) <= date)
       .reduce((sum, m) => sum + m.mortality, 0);
-
-    // Calculate transfers in and out
     const transfersOut = this.calculateTransfersOut(cageId, date);
     const transfersIn = this.calculateTransfersIn(cageId, date);
 
     return stockingsCount - mortalitiesCount + transfersIn - transfersOut;
   }
-
-  // Get all cages with their current stock balance
   getCagesWithBalance(date: Date) {
     return computed(() => {
-      // const today = new Date();
       return this.cagesSignal().map((cage) => ({
         ...cage,
         currentBalance: this.getStockBalance(cage.id, date),
       }));
     });
   }
-
-  // Get empty cages for a specific date
   getEmptyCagesOnDate(date: Date) {
     return this.cagesSignal().filter(
       (cage) => cage.status === 'empty' || this.getStockBalance(cage.id, date) === 0,
     );
   }
-
-  // Get stocked cages for a specific date
   getStockedCages(date: Date) {
     return this.cagesSignal().filter(
       (cage) => cage.status === 'stocked' && this.getStockBalance(cage.id, date) > 0,

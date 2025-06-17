@@ -73,22 +73,16 @@ export class TransferFormComponent implements OnInit {
         alert('Please select at least one target cage with quantity greater than 0');
         return;
       }
-
-      // Δημιουργία αντικειμένου μεταφοράς
       const transfer: Transfer = {
-        id: 0, // Θα οριστεί από το service
+        id: 0,
         date: new Date(),
         sourceCageId: sourceCageId,
         destinations: selectedTargets,
       };
-
-
-      // Κλήση του service για αποθήκευση της μεταφοράς
       this.dataService.addTransfer(transfer);
       this.closePopup();
       this.transferAdded.emit(true);
     } else {
-      // Εμφάνιση σφαλμάτων φόρμας
       this.markFormGroupTouched(this.formSub);
     }
   }
@@ -100,7 +94,6 @@ export class TransferFormComponent implements OnInit {
   onGridRowUpdated($event: RowUpdatedEvent) {
     console.log('Row updated:', $event);
   }
-  // Βοηθητική μέθοδος για να σημειωθούν όλα τα πεδία ως touched
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
@@ -119,8 +112,6 @@ export class TransferFormComponent implements OnInit {
   onGridRowUpdating(event: RowUpdatingEvent) {
     const rowIndex = event.component.getRowIndexByKey(event.key);
     const targetCagesArray = this.formSub.get('targetCagesArray') as FormArray;
-
-    // Ενημέρωση του FormGroup με τα νέα δεδομένα
     if (event.newData.quantity !== undefined) {
       targetCagesArray.at(rowIndex).get('quantity')?.setValue(event.newData.quantity);
     }
@@ -133,26 +124,18 @@ export class TransferFormComponent implements OnInit {
   onSourceCageChange(event: ValueChangedEvent) {
     const sourceId = event.value;
     this.updateAvailableTargetCages(sourceId);
-
-    // Επαναφορά του FormArray όταν αλλάζει το source cage
     this.resetTargetCagesFormArray();
   }
 
   private resetTargetCagesFormArray() {
     const targetCagesArray = this.formSub.get('targetCagesArray') as FormArray;
-
-    // Καθαρίζουμε το υπάρχον FormArray
     while (targetCagesArray.length) {
       targetCagesArray.removeAt(0);
     }
-
-    // Προσθέτουμε ένα FormGroup για κάθε διαθέσιμο cage
     this.availableTargetCages.forEach((cage) => {
       targetCagesArray.push(this.createTargetCageFormGroup(cage));
     });
   }
-
-  // Δημιουργία FormGroup για κάθε target cage
   private createTargetCageFormGroup(cage: Cage): FormGroup {
     return this.formBuilder.group({
       destinationCageId: [cage.id],
@@ -163,10 +146,8 @@ export class TransferFormComponent implements OnInit {
   }
   private updateAvailableTargetCages(sourceId: number) {
     if (sourceId) {
-      // Αφαίρεση του επιλεγμένου source cage από τα διαθέσιμα target cages
       this.availableTargetCages = this.filledCages.filter((cage) => cage.id !== sourceId);
     } else {
-      // Αν δεν υπάρχει επιλογή, όλα τα cages είναι διαθέσιμα
       this.availableTargetCages = [...this.filledCages];
     }
   }
@@ -175,7 +156,6 @@ export class TransferFormComponent implements OnInit {
     this.formSub = this.formBuilder.group({
       cageSource: [''],
       targetCagesArray: this.formBuilder.array([]),
-      // amount: [null, [Validators.required, Validators.min(1)]],
     });
   }
 }

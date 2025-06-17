@@ -39,13 +39,8 @@ export class MortalitiesComponent implements OnInit {
     this.loadData();
   }
   private loadData() {
-    // Get all cages that have fish on the selected date
     const cagesWithStock = this.dataService.getCagesWithStock(this.selectedDate);
-
-    // Get existing mortalities for the selected date
     const existingMortalities = this.dataService.getMortalitiesByDate(this.selectedDate);
-
-    // Build grid data
     this.gridData = cagesWithStock.map((cage) => {
       const totalMortalities = existingMortalities
         .filter((m) => m.cageId === cage.id)
@@ -65,7 +60,6 @@ export class MortalitiesComponent implements OnInit {
   }
 
   onGridRowUpdating($event: RowUpdatingEvent): void {
-    // Validate mortality
     if (
       $event.newData.mortality !== undefined &&
       ($event.newData.mortality <= 0 || isNaN($event.newData.mortality))
@@ -75,24 +69,21 @@ export class MortalitiesComponent implements OnInit {
     }
   }
   onGridRowUpdated($event: RowUpdatedEvent): void {
-    const rowData = $event.data; // Complete row data with changes
+    const rowData = $event.data;
 
     try {
-      // This logic now ALWAYS creates a new stocking transaction.
       const newMortality: Mortality = {
-        id: 0, // Let the service generate the ID
+        id: 0,
         cageId: rowData.cageId,
         date: this.selectedDate,
         mortality: rowData.mortality,
       };
 
       this.dataService.addMortality(newMortality);
-      // Important: After adding, you must refresh the data to see the change.
       this.loadData();
     } catch (error) {
       console.error('Error saving stocking:', error);
       this.notificationsService.showError('Failed to save stocking');
-      // It's good practice to reload data even on failure to reset the grid state.
       this.loadData();
     }
   }

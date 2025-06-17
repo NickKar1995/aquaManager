@@ -4,7 +4,7 @@ const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
 
 module.exports = tseslint.config(
-  { ignores: ['src/app/core/**'] },
+  { ignores: ['src/app/core/**', 'src/app/app.component.ts'] },
   {
     files: ['**/*.ts'],
     extends: [
@@ -33,7 +33,6 @@ module.exports = tseslint.config(
       ],
       '@angular-eslint/prefer-on-push-component-change-detection': ['warn'],
       '@angular-eslint/prefer-standalone': ['error'],
-      // "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {

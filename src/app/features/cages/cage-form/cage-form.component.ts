@@ -45,12 +45,9 @@ export class CageFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Ελέγχουμε αν το isPopupVisible έχει αλλάξε
-    // Όταν ανοίγει το popup με δεδομένα edit, γεμίζουμε το form
     if (changes['initialData'] && this.initialData) {
       this.formSub.patchValue(this.initialData);
     }
-    // Αν είναι create, κάνουμε reset
     if (this.mode === 'create' && this.formSub) {
       this.formSub.reset();
     }
@@ -61,11 +58,9 @@ export class CageFormComponent implements OnInit, OnChanges {
     const payload = this.formSub.value;
     if (this.mode === 'create') {
       this.dataService.addCage(payload);
-      // κλήση Create API
     } else {
-      payload.id = this.initialData!.id; // Προσθήκη του id στο payload για ενημέρωση
+      payload.id = this.initialData!.id;
       this.dataService.updateCage(payload);
-      // κλήση Update API με this.initialData.id
     }
     this.closePopup();
   }

@@ -1,4 +1,3 @@
-// services/notification.service.ts
 import { Injectable } from '@angular/core';
 import { PositionConfig } from 'devextreme/common/core/animation';
 import notify from 'devextreme/ui/notify';
