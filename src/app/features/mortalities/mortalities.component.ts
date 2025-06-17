@@ -4,6 +4,9 @@ import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { DataService } from 'app/core/services/data/data.service';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { Mortality } from '@models';
+import { MortalityGridRow } from './models/MortalityGridRow';
+import { EventChanged } from 'app/shared/date-box/models/EventChanged';
+import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
 
 @Component({
   selector: 'app-mortalities',
@@ -16,7 +19,7 @@ export class MortalitiesComponent implements OnInit {
   private dataService = inject(DataService);
   private notificationsService = inject(NotificationsService);
   selectedDate: Date = new Date();
-  gridData: any[] = [];
+  gridData: MortalityGridRow[] = [];
   columnsStructure = [
     {
       dataField: 'cageName',
@@ -55,23 +58,24 @@ export class MortalitiesComponent implements OnInit {
       };
     });
   }
-  onDateChange(event: any) {
-    this.selectedDate = event;
-    // this.loadData();
+
+  onDateChange($event: EventChanged) {
+    if ($event instanceof Date) this.selectedDate =$event;
+    this.loadData();
   }
 
-  onGridRowUpdating(e: any): void {
+  onGridRowUpdating($event: RowUpdatingEvent): void {
     // Validate mortality
     if (
-      e.newData.mortality !== undefined &&
-      (e.newData.mortality <= 0 || isNaN(e.newData.mortality))
+      $event.newData.mortality !== undefined &&
+      ($event.newData.mortality <= 0 || isNaN($event.newData.mortality))
     ) {
-      e.cancel = true;
+      $event.cancel = true;
       this.notificationsService.showError('Mortality must be a positive number');
     }
   }
-  onGridRowUpdated(e: any): void {
-    const rowData = e.data; // Complete row data with changes
+  onGridRowUpdated($event: RowUpdatedEvent): void {
+    const rowData = $event.data; // Complete row data with changes
 
     try {
       // This logic now ALWAYS creates a new stocking transaction.

@@ -4,8 +4,7 @@ import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { DxButtonModule } from 'devextreme-angular';
 import { TransferFormComponent } from './components/transfer-form/transfer-form.component';
-import { Transfer } from '@models';
-import { ColumnConfig } from './models/ColumnConfig';
+import { ColumnConfig, Transfer } from '@models';
 import { TransferGridRow } from './models/TransferGridRow';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 
@@ -61,15 +60,15 @@ export class FishTransfersComponent implements OnInit {
   ngOnInit() {
     this.loadTransfersData();
   }
-  onDateChange(event: EventChanged) {
-    if (event instanceof Date) this.selectedDate = event;
+  onDateChange($event: EventChanged) {
+    if ($event instanceof Date) this.selectedDate = $event;
     this.loadTransfersData();
   }
-  
+
   addTransfer() {
     this.isPopupVisible = true;
   }
-  
+
   onPopupVisibilityChanged(isVisible: boolean) {
     this.isPopupVisible = isVisible;
   }

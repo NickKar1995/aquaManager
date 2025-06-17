@@ -41,8 +41,8 @@ export class FishStockingComponent implements OnInit {
     this.loadData();
   }
 
-  onDateChange(event: EventChanged) {
-    if (event instanceof Date) this.selectedDate = event;
+  onDateChange($event: EventChanged) {
+    if ($event instanceof Date) this.selectedDate = $event;
     this.loadData();
   }
 

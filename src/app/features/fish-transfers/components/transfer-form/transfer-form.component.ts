@@ -21,7 +21,7 @@ import {
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
-import { ColumnConfig } from '../../models/ColumnConfig';
+import { ColumnConfig } from '../../../../core/models/ColumnConfig';
 import { DestinationCage } from '../../models/SelectedTargetCage';
 
 @Component({
