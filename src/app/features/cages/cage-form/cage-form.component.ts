@@ -4,11 +4,13 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Cage } from '@models';
 import { DataService } from 'app/core/services/data/data.service';
 import { DxPopupModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angular';
 
@@ -19,10 +21,10 @@ import { DxPopupModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angul
   styleUrl: './cage-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CageFormComponent implements OnInit {
+export class CageFormComponent implements OnInit, OnChanges {
   @Input() isPopupVisible = false;
   @Input() mode: 'create' | 'edit' = 'create';
-  @Input() initialData: any = null;
+  @Input() initialData: Cage | null = null;
   @Output() popupVisibilityChanged = new EventEmitter<boolean>();
 
   private formBuilder = inject(FormBuilder);
@@ -63,7 +65,7 @@ export class CageFormComponent implements OnInit {
       this.dataService.addCage(payload);
       // κλήση Create API
     } else {
-      payload.id = this.initialData.id; // Προσθήκη του id στο payload για ενημέρωση
+      payload.id = this.initialData!.id; // Προσθήκη του id στο payload για ενημέρωση
       this.dataService.updateCage(payload);
       // κλήση Update API με this.initialData.id
     }

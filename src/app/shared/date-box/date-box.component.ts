@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { DxDateBoxModule } from 'devextreme-angular';
 import { LabelMode } from 'devextreme/common';
 import { DateType } from 'devextreme/ui/date_box';
+import { EventChanged } from './models/EventChanged';
 
 @Component({
   selector: 'app-date-box',
@@ -15,9 +16,9 @@ export class DateBoxComponent {
   @Input() label!: string;
   @Input() labelMode!: LabelMode;
   @Input() type!: DateType;
-  @Output() dateChange = new EventEmitter<string | number | Date | null>();
+  @Output() dateChange = new EventEmitter<EventChanged>();
 
-  onDateChange($event: string | number | Date | null) {
+  onDateChange($event: EventChanged) {
     this.dateChange.emit($event);
   }
 }

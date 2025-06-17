@@ -5,6 +5,9 @@ import { NotificationsService } from 'app/core/services/notifications/notificati
 import { DataService } from 'app/core/services/data/data.service';
 import { Cage, Stocking } from '@models';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
+import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
+import { CageGridRow } from './models/CageGridRow';
+import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 
 @Component({
   imports: [DxDateBoxModule, DataGridComponent, DataGridComponent, DateBoxComponent],
@@ -16,7 +19,7 @@ export class FishStockingComponent implements OnInit {
   private dataService = inject(DataService);
   private notificationsService = inject(NotificationsService);
   selectedDate: Date = new Date();
-  gridData: any[] = [];
+  gridData: CageGridRow[] = [];
   emptyCages: Cage[] = [];
   todaysTransactions: Stocking[] = [];
   columnsStructure = [
@@ -38,8 +41,8 @@ export class FishStockingComponent implements OnInit {
     this.loadData();
   }
 
-  onDateChange(event: any) {
-    this.selectedDate = event;
+  onDateChange(event: EventChanged) {
+    if (event instanceof Date) this.selectedDate = event;
     this.loadData();
   }
 
@@ -79,27 +82,27 @@ export class FishStockingComponent implements OnInit {
         cageId: cage.id,
         cageName: cage.name,
         quantity: todaysStockingQty, // Show today's stocking quantity
-        originalQuantity: todaysStockingQty, // Keep track of original for delta calculation
-        hasExistingStocking: todaysStockingQty > 0,
+        // originalQuantity: todaysStockingQty, // Keep track of original for delta calculation
+        // hasExistingStocking: todaysStockingQty > 0,
       };
     });
   }
 
   // For validation
-  onGridRowUpdating(e: any): void {
+  onGridRowUpdating($event: RowUpdatingEvent): void {
     // Validate quantity
     if (
-      e.newData.quantity !== undefined &&
-      (e.newData.quantity <= 0 || isNaN(e.newData.quantity))
+      $event.newData.quantity !== undefined &&
+      ($event.newData.quantity <= 0 || isNaN($event.newData.quantity))
     ) {
-      e.cancel = true;
+      $event.cancel = true;
       this.notificationsService.showError('Quantity must be a positive number');
     }
   }
 
   // Corrected onGridRowUpdated Logic
-  onGridRowUpdated(e: any): void {
-    const rowData = e.data; // Complete row data with changes
+  onGridRowUpdated($event: RowUpdatedEvent): void {
+    const rowData = $event.data; // Complete row data with changes
 
     // We only care if the user entered a positive quantity.
     // We no longer check for "isExisting".

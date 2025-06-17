@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CardComponent } from 'app/shared/card/card.component';
-import { DxTileViewModule } from 'devextreme-angular';
-import { DxBoxModule } from 'devextreme-angular';
 import { CageFormComponent } from './cage-form/cage-form.component';
-import { DxButtonModule } from 'devextreme-angular';
+import { DxButtonModule, DxTileViewModule, DxBoxModule } from 'devextreme-angular';
 import { DataService } from 'app/core/services/data/data.service';
+import { Mode } from './models/Mode';
+import { Cage } from '@models';
 
 @Component({
   selector: 'app-cages',
@@ -14,8 +14,8 @@ import { DataService } from 'app/core/services/data/data.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CagesComponent {
-  mode: 'create' | 'edit' = 'create';
-  selectedData: any = null;
+  mode: Mode = 'create';
+  selectedData: Cage | null = null;
   isPopupVisible = false;
   private dataService = inject(DataService);
 
@@ -27,11 +27,10 @@ export class CagesComponent {
     this.isPopupVisible = true;
   }
   onPopupVisibilityChanged(isVisible: boolean) {
-    console.log('Popup visibility changed to:', isVisible);
     this.isPopupVisible = isVisible;
   }
 
-  editCage(data: any) {
+  editCage(data: Cage) {
     console.log(data);
     this.mode = 'edit';
     this.selectedData = data;

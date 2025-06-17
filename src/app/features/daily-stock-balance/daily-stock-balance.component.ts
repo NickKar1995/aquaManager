@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DataService } from 'app/core/services/data/data.service';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
+import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 
 @Component({
   selector: 'app-daily-stock-balance',
@@ -12,10 +13,9 @@ import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 })
 export class DailyStockBalanceComponent {
   private dataService = inject(DataService);
-  // selectedDate: Date = new Date();
-  selectedDate = signal<Date>(new Date()); // Signal!
+  selectedDate = signal<Date>(new Date());
   gridData = computed(() => {
-    const date = this.selectedDate(); // Παίρνει την τρέχουσα ημερομηνία
+    const date = this.selectedDate();
     return this.dataService.cages().map((cage) => ({
       ...cage,
       currentBalance: this.dataService.getStockBalance(cage.id, date),
@@ -37,7 +37,7 @@ export class DailyStockBalanceComponent {
     },
   ];
 
-  onDateChange($event: string | number | Date | null) {
-    this.selectedDate.set($event as Date);
+  onDateChange($event: EventChanged) {
+    if ($event instanceof Date) this.selectedDate.set($event);
   }
 }
