@@ -3,7 +3,7 @@ import { DateBoxComponent } from '../../shared/date-box/date-box.component';
 import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { DataService } from 'app/core/services/data/data.service';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
-import { Mortality } from '@models';
+import { ColumnConfig, Mortality } from '@models';
 import { MortalityGridRow } from './models/MortalityGridRow';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
@@ -20,7 +20,7 @@ export class MortalitiesComponent implements OnInit {
   private notificationsService = inject(NotificationsService);
   selectedDate: Date = new Date();
   gridData: MortalityGridRow[] = [];
-  columnsStructure = [
+  columnsStructure: ColumnConfig[] = [
     {
       dataField: 'cageName',
       caption: 'Cage',
@@ -60,7 +60,7 @@ export class MortalitiesComponent implements OnInit {
   }
 
   onDateChange($event: EventChanged) {
-    if ($event instanceof Date) this.selectedDate =$event;
+    if ($event instanceof Date) this.selectedDate = $event;
     this.loadData();
   }
 

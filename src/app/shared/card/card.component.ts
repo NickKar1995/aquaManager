@@ -9,7 +9,7 @@ import { Cage } from '@models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent {
-  @Input() data: any;
+  @Input() data!: Cage;
   @Output() edit = new EventEmitter<Cage>();
   @Output() delete = new EventEmitter<Cage>();
   onCardClick() {
@@ -17,7 +17,7 @@ export class CardComponent {
   }
 
   onDeleteClick(event: MouseEvent) {
-    event.stopPropagation(); // 📌 μπλοκάρει το bubbling
+    event.stopPropagation();
     this.delete.emit(this.data);
   }
 }

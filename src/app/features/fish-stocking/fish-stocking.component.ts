@@ -3,7 +3,7 @@ import { DxDateBoxModule } from 'devextreme-angular';
 import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { DataService } from 'app/core/services/data/data.service';
-import { Cage, Stocking } from '@models';
+import { Cage, ColumnConfig, Stocking } from '@models';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
 import { CageGridRow } from './models/CageGridRow';
@@ -22,7 +22,7 @@ export class FishStockingComponent implements OnInit {
   gridData: CageGridRow[] = [];
   emptyCages: Cage[] = [];
   todaysTransactions: Stocking[] = [];
-  columnsStructure = [
+  columnsStructure: ColumnConfig[] = [
     {
       dataField: 'cageName',
       caption: 'Cage',

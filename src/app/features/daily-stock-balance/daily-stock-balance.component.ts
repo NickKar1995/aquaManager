@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ColumnConfig } from '@models';
 import { DataService } from 'app/core/services/data/data.service';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
@@ -21,7 +22,7 @@ export class DailyStockBalanceComponent {
       currentBalance: this.dataService.getStockBalance(cage.id, date),
     }));
   });
-  columnsStructure = [
+  columnsStructure: ColumnConfig[] = [
     {
       dataField: 'name',
       caption: 'Cage',

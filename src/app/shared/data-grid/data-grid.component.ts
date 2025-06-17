@@ -1,13 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ColumnConfig } from '@models';
 import { DxDataGridModule } from 'devextreme-angular';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
+import { GridDataModel } from './models/GridDataModel';
 
 @Component({
   selector: 'app-data-grid',
@@ -16,18 +11,14 @@ import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
   styleUrl: './data-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataGridComponent implements OnInit {
-  @Input() data: any[] = [];
-  @Input() columnsStructure: any[] = [];
+export class DataGridComponent {
+  @Input() data: GridDataModel = [];
+  @Input() columnsStructure: ColumnConfig[] = [];
   @Output() rowUpdating = new EventEmitter<RowUpdatingEvent>();
   @Output() rowUpdated = new EventEmitter<RowUpdatedEvent>();
 
-  ngOnInit() {}
-
-  private loadData() {}
-  
-  onRowUpdating(e: any): void {
-    this.rowUpdating.emit(e);
+  onRowUpdating($event: RowUpdatingEvent): void {
+    this.rowUpdating.emit($event);
   }
   onRowUpdated($event: RowUpdatedEvent) {
     this.rowUpdated.emit($event);

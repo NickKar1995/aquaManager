@@ -17,7 +17,6 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { PivotRow } from './models/PivotRow';
 import { CellInfo } from './models/CellInfo';
 
-
 @Component({
   selector: 'app-pivot-analysis',
   imports: [DxPivotGridModule, DxChartModule],
@@ -41,7 +40,6 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
   }
 
   private configurePivotGrid() {
-    // Προετοιμασία δεδομένων για το pivot grid
     const mortalityData = this.prepareDataForPivot();
 
     this.pivotGridDataSource = new PivotGridDataSource({
@@ -96,11 +94,9 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
   }
 
   private prepareDataForPivot(): PivotRow[] {
-    // Λήψη όλων των δεδομένων θνησιμότητας
     const mortalities = this.dataService.mortalities();
     const cages = this.dataService.cages();
 
-    // Μετατροπή των δεδομένων σε κατάλληλη μορφή για το pivot
     return mortalities.map((mortality) => {
       const date = new Date(mortality.date);
       const cage = cages.find((c) => c.id === mortality.cageId);
@@ -108,7 +104,7 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
       return {
         date: mortality.date,
         year: date.getFullYear(),
-        month: date.getMonth() + 1, // JavaScript months are 0-based
+        month: date.getMonth() + 1,
         cageId: mortality.cageId,
         cageName: cage ? cage.name : 'Unknown',
         mortality: mortality.mortality,
