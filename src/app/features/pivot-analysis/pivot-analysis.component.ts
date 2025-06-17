@@ -13,8 +13,10 @@ import {
   DxPivotGridComponent,
   DxPivotGridModule,
 } from 'devextreme-angular';
-import { CellClickEvent } from 'devextreme/ui/pivot_grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { PivotRow } from './models/PivotRow';
+import { CellInfo } from './models/CellInfo';
+
 
 @Component({
   selector: 'app-pivot-analysis',
@@ -58,7 +60,7 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
           caption: 'Month',
           dataField: 'month',
           area: 'column',
-          customizeText: (cellInfo: any) => {
+          customizeText: (cellInfo: CellInfo) => {
             const monthNames = [
               'January',
               'February',
@@ -73,7 +75,12 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
               'November',
               'December',
             ];
-            return monthNames[cellInfo.value - 1];
+
+            if (cellInfo.value && typeof cellInfo.value === 'number') {
+              return monthNames[cellInfo.value - 1] || cellInfo.value.toString();
+            }
+
+            return cellInfo.valueText || '';
           },
         },
         {
@@ -88,7 +95,7 @@ export class PivotAnalysisComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private prepareDataForPivot(): any[] {
+  private prepareDataForPivot(): PivotRow[] {
     // Λήψη όλων των δεδομένων θνησιμότητας
     const mortalities = this.dataService.mortalities();
     const cages = this.dataService.cages();
