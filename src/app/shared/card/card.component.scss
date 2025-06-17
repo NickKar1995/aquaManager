@@ -7,7 +7,7 @@
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
-  background-color: #f0f0f0;
+  background-color: var(--background-color-card);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -21,7 +21,7 @@
 }
 
 .card:hover {
-  background-color: #e8e8e8;
+  background-color: var(--background-color-hover);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
   cursor: pointer;
@@ -29,7 +29,7 @@
 .card:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #d0d0d0;
+  background-color: var(--background-color-active);
 }
 
 // Focus state για accessibility
