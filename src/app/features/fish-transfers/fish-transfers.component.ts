@@ -1,11 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { DataService } from 'app/core/services/data/data.service';
-import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { DxButtonModule } from 'devextreme-angular';
 import { TransferFormComponent } from './components/transfer-form/transfer-form.component';
 import { Transfer } from '@models';
+import { ColumnConfig } from './models/ColumnConfig';
+import { TransferGridRow } from './models/TransferGridRow';
+import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 
 @Component({
   selector: 'app-fish-transfers',
@@ -15,8 +17,7 @@ import { Transfer } from '@models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FishTransfersComponent implements OnInit {
-  gridData!: any[];
-  columnsStructureInput = [
+  columnsStructureInput: ColumnConfig[] = [
     {
       dataField: 'name',
       caption: 'Destination Cage',
@@ -30,7 +31,8 @@ export class FishTransfersComponent implements OnInit {
       alignment: 'left',
     },
   ];
-  columnsStructure = [
+
+  columnsStructure: ColumnConfig[] = [
     {
       dataField: 'sourceCageName',
       caption: 'Source Cage',
@@ -50,57 +52,38 @@ export class FishTransfersComponent implements OnInit {
       alignment: 'left',
     },
   ];
+
+  gridData!: TransferGridRow[];
   isPopupVisible = false;
 
   private dataService = inject(DataService);
-  private notificationsService = inject(NotificationsService);
   selectedDate: Date = new Date();
   ngOnInit() {
     this.loadTransfersData();
   }
-  onDateChange(event: any) {
-    this.selectedDate = event;
+  onDateChange(event: EventChanged) {
+    if (event instanceof Date) this.selectedDate = event;
     this.loadTransfersData();
   }
+  
   addTransfer() {
     this.isPopupVisible = true;
   }
+  
   onPopupVisibilityChanged(isVisible: boolean) {
     this.isPopupVisible = isVisible;
   }
-  onTransferAdded($event: boolean) {
+
+  onTransferAdded() {
     this.loadTransfersData();
   }
 
   loadTransfersData() {
     const transfers = this.dataService.getTransfersByDate(this.selectedDate);
-
     this.gridData = this.groupedTransfersForGrid(transfers);
   }
 
-  private flattenTransfersForGrid(transfers: any): any[] {
-    const gridData: any[] = [];
-
-    transfers.forEach((transfer: any) => {
-      const sourceCage = this.dataService.getCageById(transfer.sourceCageId);
-
-      transfer.destinations.forEach((destination: any) => {
-        const destinationCage = this.dataService.getCageById(destination.destinationCageId);
-
-        gridData.push({
-          transferId: transfer.id,
-          sourceCageName: sourceCage?.name || 'Unknown',
-          destinationCageName: destinationCage?.name || 'Unknown',
-          quantity: destination.quantity,
-          date: transfer.date,
-        });
-      });
-    });
-
-    return gridData;
-  }
-
-  private groupedTransfersForGrid(transfers: Transfer[]): any[] {
+  private groupedTransfersForGrid(transfers: Transfer[]): TransferGridRow[] {
     return transfers.map((transfer) => {
       const sourceCage = this.dataService.getCageById(transfer.sourceCageId);
       const destinationNames = transfer.destinations
@@ -111,7 +94,6 @@ export class FishTransfersComponent implements OnInit {
         .join(', ');
 
       const totalQuantity = transfer.destinations.reduce((sum, dest) => sum + dest.quantity, 0);
-
       return {
         transferId: transfer.id,
         sourceCageName: sourceCage?.name || 'Unknown',

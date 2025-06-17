@@ -19,14 +19,7 @@
 
 <app-transfer-form
   (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
-  (transferAdded)="onTransferAdded($event)"
+  (transferAdded)="onTransferAdded()"
   [isPopupVisible]="isPopupVisible"
   [columnsStructure]="columnsStructureInput"
 ></app-transfer-form>
-
-<!-- <app-cage-form
-  (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
-  [isPopupVisible]="isPopupVisible"
-  [initialData]="selectedData"
-  [mode]="mode"
-/> -->

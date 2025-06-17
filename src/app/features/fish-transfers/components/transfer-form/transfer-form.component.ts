@@ -5,19 +5,24 @@ import {
   inject,
   Input,
   OnInit,
-  output,
   Output,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Cage, Transfer } from '@models';
+import { Cage, Stocking, Transfer } from '@models';
 import { DataService } from 'app/core/services/data/data.service';
-import { DxPopupModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angular';
-import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxTagBoxModule } from 'devextreme-angular';
+import {
+  DxPopupModule,
+  DxTextBoxModule,
+  DxButtonModule,
+  DxTagBoxModule,
+  DxNumberBoxModule,
+  DxSelectBoxModule,
+} from 'devextreme-angular';
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
-import { DxNumberBoxModule } from 'devextreme-angular';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
+import { ColumnConfig } from '../../models/ColumnConfig';
+import { DestinationCage } from '../../models/SelectedTargetCage';
 
 @Component({
   selector: 'app-transfer-form',
@@ -44,18 +49,13 @@ export class TransferFormComponent implements OnInit {
   availableTargetCages: Cage[] = [...this.filledCages];
 
   @Input() isPopupVisible!: boolean;
-  @Input() columnsStructure!: any[];
+  @Input() columnsStructure!: ColumnConfig[];
   @Output() popupVisibilityChanged = new EventEmitter<boolean>();
-  transferAdded = output<boolean>();
+  @Output() transferAdded = new EventEmitter<boolean>();
 
   ngOnInit() {
     this.initForm();
   }
-
-  // onSourceCageChange(event: ValueChangedEvent) {
-  //   const sourceId = event.value;
-  //   this.updateAvailableTargetCages(sourceId);
-  // }
 
   onSubmit() {
     if (this.formSub.valid) {
@@ -65,8 +65,8 @@ export class TransferFormComponent implements OnInit {
       console.log('Form data:', formData, sourceCageId);
       // Φιλτράρουμε μόνο τα επιλεγμένα cages με ποσότητα > 0
       const selectedTargets = formData.targetCagesArray
-        .filter((target: any) => target.quantity > 0)
-        .map((target: any) => ({
+        .filter((target: Stocking) => target.quantity > 0)
+        .map((target: DestinationCage) => ({
           destinationCageId: target.destinationCageId,
           quantity: target.quantity,
         }));
@@ -90,7 +90,7 @@ export class TransferFormComponent implements OnInit {
       // Κλήση του service για αποθήκευση της μεταφοράς
       this.dataService.addTransfer(transfer);
       this.closePopup();
-      this.transferAdded.emit(true)
+      this.transferAdded.emit(true);
     } else {
       // Εμφάνιση σφαλμάτων φόρμας
       this.markFormGroupTouched(this.formSub);
