@@ -319,16 +319,7 @@ export class DataService {
       }
     });
   }
-  private updateAllCageStatuses(): void {
-    const today = new Date();
-    this.cagesSignal().forEach((cage) => {
-      const balance = this.getStockBalance(cage.id, today);
-      const newStatus = balance > 0 ? 'stocked' : 'empty';
-      if (cage.status !== newStatus) {
-        this.updateCage({ ...cage, status: newStatus }, false);
-      }
-    });
-  }
+  
   getStockBalance(cageId: number, date: Date): number {
     const stockingsCount = this.stockingsSignal()
       .filter((s) => s.cageId === cageId && new Date(s.date) <= date)
