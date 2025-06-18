@@ -4,13 +4,13 @@ import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
 import { DataService } from 'app/core/services/data/data.service';
 import { Cage, ColumnConfig, Stocking } from '@models';
-import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
 import { CageGridRow } from './models/CageGridRow';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
+import { GridDateLayoutComponent } from '../../shared/grid-date-layout/grid-date-layout.component';
 
 @Component({
-  imports: [DxDateBoxModule, DataGridComponent, DataGridComponent, DateBoxComponent],
+  imports: [DxDateBoxModule, DataGridComponent, DataGridComponent, GridDateLayoutComponent],
   templateUrl: './fish-stocking.component.html',
   styleUrl: './fish-stocking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +18,7 @@ import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 export class FishStockingComponent implements OnInit {
   private dataService = inject(DataService);
   private notificationsService = inject(NotificationsService);
+  headerTitle = 'Select date for stocking';
   selectedDate: Date = new Date();
   gridData: CageGridRow[] = [];
   emptyCages: Cage[] = [];

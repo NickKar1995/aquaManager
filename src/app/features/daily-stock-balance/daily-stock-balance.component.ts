@@ -2,18 +2,19 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { ColumnConfig } from '@models';
 import { DataService } from 'app/core/services/data/data.service';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
-import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
+import { GridDateLayoutComponent } from '../../shared/grid-date-layout/grid-date-layout.component';
 
 @Component({
   selector: 'app-daily-stock-balance',
-  imports: [DateBoxComponent, DataGridComponent],
+  imports: [ DataGridComponent, GridDateLayoutComponent],
   templateUrl: './daily-stock-balance.component.html',
   styleUrl: './daily-stock-balance.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyStockBalanceComponent {
   private dataService = inject(DataService);
+  headerTitle = 'Select date for balance snapshot';
   selectedDate = signal<Date>(new Date());
   gridData = computed(() => {
     const date = this.selectedDate();

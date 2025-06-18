@@ -1,21 +1,22 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { DataService } from 'app/core/services/data/data.service';
 import { DataGridComponent } from 'app/shared/data-grid/data-grid.component';
-import { DateBoxComponent } from 'app/shared/date-box/date-box.component';
 import { DxButtonModule } from 'devextreme-angular';
 import { TransferFormComponent } from './components/transfer-form/transfer-form.component';
 import { ColumnConfig, Transfer } from '@models';
 import { TransferGridRow } from './models/TransferGridRow';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
+import { GridDateLayoutComponent } from '../../shared/grid-date-layout/grid-date-layout.component';
 
 @Component({
   selector: 'app-fish-transfers',
-  imports: [DateBoxComponent, DxButtonModule, DataGridComponent, TransferFormComponent],
+  imports: [DxButtonModule, DataGridComponent, TransferFormComponent, GridDateLayoutComponent],
   templateUrl: './fish-transfers.component.html',
   styleUrl: './fish-transfers.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FishTransfersComponent implements OnInit {
+  headerTitle = 'Select date for transfers';
   columnsStructureInput: ColumnConfig[] = [
     {
       dataField: 'name',

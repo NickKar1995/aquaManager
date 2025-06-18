@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { DateBoxComponent } from '../../shared/date-box/date-box.component';
 import { DataGridComponent } from '../../shared/data-grid/data-grid.component';
 import { DataService } from 'app/core/services/data/data.service';
 import { NotificationsService } from 'app/core/services/notifications/notifications.service';
@@ -7,10 +6,11 @@ import { ColumnConfig, Mortality } from '@models';
 import { MortalityGridRow } from './models/MortalityGridRow';
 import { EventChanged } from 'app/shared/date-box/models/EventChanged';
 import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
+import { GridDateLayoutComponent } from '../../shared/grid-date-layout/grid-date-layout.component';
 
 @Component({
   selector: 'app-mortalities',
-  imports: [DateBoxComponent, DataGridComponent],
+  imports: [DataGridComponent, GridDateLayoutComponent],
   templateUrl: './mortalities.component.html',
   styleUrl: './mortalities.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +18,7 @@ import { RowUpdatedEvent, RowUpdatingEvent } from 'devextreme/ui/data_grid';
 export class MortalitiesComponent implements OnInit {
   private dataService = inject(DataService);
   private notificationsService = inject(NotificationsService);
+  headerTitle = 'Select date for mortalities';
   selectedDate: Date = new Date();
   gridData: MortalityGridRow[] = [];
   columnsStructure: ColumnConfig[] = [

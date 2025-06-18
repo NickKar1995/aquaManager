@@ -1,19 +1,8 @@
-<h5>Select date for stocking</h5>
-<section class="date-input">
-  <app-date-box
-    [label]="'Select Date'"
-    [labelMode]="'floating'"
-    [type]="'date'"
-    [selectedDate]="selectedDate"
-    (dateChange)="onDateChange($event)"
-  ></app-date-box>
-</section>
-
-<section class="grid">
+<app-grid-date-layout [headerTitle]="headerTitle" (dateChanged)="onDateChange($event)">
   <app-data-grid
     (rowUpdating)="onGridRowUpdating($event)"
     (rowUpdated)="onGridRowUpdated($event)"
     [data]="gridData"
     [columnsStructure]="columnsStructure"
   ></app-data-grid>
-</section>
+</app-grid-date-layout>

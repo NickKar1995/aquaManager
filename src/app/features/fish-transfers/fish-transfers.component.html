@@ -1,25 +1,13 @@
-<h5>Select date for transfers</h5>
-<section class="date-input">
-  <app-date-box
-    [label]="'Select Date'"
-    [labelMode]="'floating'"
-    [type]="'date'"
-    [selectedDate]="selectedDate"
-    (dateChange)="onDateChange($event)"
-  ></app-date-box>
-</section>
-
-<section class="grid">
+<app-grid-date-layout [headerTitle]="headerTitle" (dateChanged)="onDateChange($event)">
   <app-data-grid [data]="gridData" [columnsStructure]="columnsStructure"></app-data-grid>
-</section>
 
-<section class="actions">
-  <dx-button type="default" text="Add transfer" (onClick)="addTransfer()"></dx-button>
-</section>
-
-<app-transfer-form
-  (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
-  (transferAdded)="onTransferAdded()"
-  [isPopupVisible]="isPopupVisible"
-  [columnsStructure]="columnsStructureInput"
-></app-transfer-form>
+  <section class="actions">
+    <dx-button type="default" text="Add transfer" (onClick)="addTransfer()"></dx-button>
+  </section>
+  <app-transfer-form
+    (popupVisibilityChanged)="onPopupVisibilityChanged($event)"
+    (transferAdded)="onTransferAdded()"
+    [isPopupVisible]="isPopupVisible"
+    [columnsStructure]="columnsStructureInput"
+  ></app-transfer-form>
+</app-grid-date-layout>
